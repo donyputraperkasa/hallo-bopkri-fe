@@ -1,65 +1,69 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, FileCheck2, ShieldCheck, TicketCheck } from "lucide-react";
+import { PublicLayout } from "@/components/layout/public-layout";
+import { CATEGORIES } from "@/lib/constants";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <PublicLayout>
+      <section className="hero-building">
+        <div className="container grid gap-12 py-18 text-white lg:grid-cols-[1.1fr_.9fr] lg:py-26">
+          <div className="self-center">
+            <span className="eyebrow">Layanan aspirasi Yayasan BOPKRI</span>
+            <h1 className="mt-6 max-w-3xl text-4xl leading-[1.08] font-extrabold tracking-[-.04em] sm:text-6xl">
+              Setiap suara layak <span className="text-[#f2d35f]">didengar</span>
+              <br /> dan ditindaklanjuti.
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-blue-50/90">
+              Sampaikan pertanyaan, apresiasi, atau keluhan tanpa perlu membuat
+              akun. Pantau prosesnya kapan saja menggunakan kode tiket.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/kirim-aduan" className="btn-primary">
+                Kirim Aduan <ArrowRight size={18} />
+              </Link>
+              <Link href="/lacak-aduan" className="btn-secondary text-[#17233f]">
+                Lacak Tiket
+              </Link>
+            </div>
+          </div>
+          <div className="surface relative overflow-hidden p-6 text-[#17233f] sm:p-8">
+            <div className="absolute -top-18 -right-14 size-52 rounded-full bg-[#fff4bd]" />
+            <p className="relative text-sm font-bold text-[#1f4f8f]">ALUR SEDERHANA</p>
+            <div className="relative mt-6 space-y-4">
+              {[
+                [FileCheck2, "Isi formulir", "Pilih kategori dan ceritakan dengan jelas."],
+                [TicketCheck, "Simpan tiket", "Kode tiket diberikan setelah aduan terkirim."],
+                [ShieldCheck, "Pantau proses", "Cek status dan catatan tindak lanjut admin."],
+              ].map(([Icon, title, text], index) => {
+                const StepIcon = Icon as typeof FileCheck2;
+                return (
+                  <div key={String(title)} className="interactive-card flex gap-4 rounded-2xl bg-[#f4f7fc] p-4">
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-white text-[#1f4f8f] shadow-sm">
+                      <StepIcon size={21} />
+                    </span>
+                    <div>
+                      <h2 className="font-bold">{index + 1}. {String(title)}</h2>
+                      <p className="mt-1 text-sm text-slate-500">{String(text)}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+      <section className="container py-14">
+        <div className="grid gap-4 md:grid-cols-3">
+          {CATEGORIES.map(({ value, label, description, icon: Icon, tone }) => (
+            <article key={value} className={`surface interactive-card border-t-4 p-6 tone-${tone}`}>
+              <Icon className="text-[#1f4f8f]" />
+              <h2 className="mt-5 text-xl font-extrabold">{label}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
+            </article>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+    </PublicLayout>
   );
 }
