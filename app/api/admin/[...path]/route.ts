@@ -10,3 +10,6 @@ export const POST = (request: Request, context: Context) =>
 
 export const PATCH = (request: Request, context: Context) =>
   forward(request, context, true);
+
+export const DELETE = (request: Request, context: Context) =>
+  forward(request, context, true);

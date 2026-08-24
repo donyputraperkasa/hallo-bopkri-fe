@@ -5,6 +5,14 @@ import { ArrowRight, LockKeyhole, ShieldCheck } from "lucide-react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
 
+type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+
+function dashboardFor(role: AdminRole): string {
+  if (role === "DIRECTOR") return "/masdon/director/dashboard";
+  if (role === "MANAGER") return "/masdon/manager/dashboard";
+  return "/masdon/dashboard";
+}
+
 export function LoginForm() {
   const { show } = useToast();
   const [error, setError] = useState("");
@@ -16,7 +24,7 @@ export function LoginForm() {
     setLoading(true);
     const values = new FormData(event.currentTarget);
     try {
-      await readResponse(
+      const data = await readResponse<{ role: AdminRole; displayName: string }>(
         await fetch("/api/auth/login", {
           method: "POST",
           headers: { "content-type": "application/json" },
@@ -26,8 +34,8 @@ export function LoginForm() {
           }),
         })
       );
-      show("Login berhasil. Selamat datang kembali.");
-      window.location.assign("/masdon/dashboard");
+      show(`Login berhasil. Selamat datang, ${data.displayName ?? "Admin"}!`);
+      window.location.assign(dashboardFor(data.role));
     } catch (reason) {
       const message = reason instanceof Error ? reason.message : "Login gagal.";
       setError(message);
@@ -43,15 +51,15 @@ export function LoginForm() {
           <LockKeyhole size={23} />
         </span>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50/80 px-3 py-1 text-xs font-bold text-amber-800">
-          <ShieldCheck size={13} /> Akses Admin
+          <ShieldCheck size={13} /> Akses Sistem
         </span>
       </div>
 
       <h1 className="mt-6 text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
-        Masuk sebagai admin
+        Masuk ke sistem
       </h1>
       <p className="mt-2 text-sm leading-6 text-stone-500">
-        Gunakan akun admin Yayasan BOPKRI.
+        Gunakan akun yang telah diberikan oleh owner sistem.
       </p>
 
       <div className="mt-6 space-y-4.5">
@@ -61,7 +69,7 @@ export function LoginForm() {
             className="field"
             name="username"
             autoComplete="username"
-            placeholder="masukan username nya masdondon"
+            placeholder="Masukkan username Anda"
             required
           />
         </label>
@@ -73,7 +81,7 @@ export function LoginForm() {
             type="password"
             name="password"
             autoComplete="current-password"
-            placeholder="masukan password masdondon"
+            placeholder="Masukkan password Anda"
             required
           />
         </label>

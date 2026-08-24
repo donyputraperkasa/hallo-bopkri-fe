@@ -25,12 +25,14 @@ export function ComplaintDetailModal({
   onClose,
   onOpenDispatch,
   onStatusUpdated,
+  readOnly = false,
 }: {
   item: Complaint | null;
   statuses: ComplaintStatus[];
   onClose: () => void;
   onOpenDispatch: (complaint: Complaint) => void;
   onStatusUpdated: () => void;
+  readOnly?: boolean;
 }) {
   const { show } = useToast();
   const [fullItem, setFullItem] = useState<Complaint | null>(item);
@@ -160,14 +162,16 @@ export function ComplaintDetailModal({
                     );
                   })
                 )}
-                <button
-                  type="button"
-                  onClick={() => onOpenDispatch(current)}
-                  className="inline-flex items-center gap-1 rounded-lg border border-dashed border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-800 hover:bg-amber-100 ml-1 transition"
-                >
-                  <SendHorizontal size={12} />
-                  <span>+ Disposisikan Bidang</span>
-                </button>
+                {!readOnly && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenDispatch(current)}
+                    className="inline-flex items-center gap-1 rounded-lg border border-dashed border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-800 hover:bg-amber-100 ml-1 transition"
+                  >
+                    <SendHorizontal size={12} />
+                    <span>+ Disposisikan Bidang</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -276,41 +280,43 @@ export function ComplaintDetailModal({
             )}
 
             {/* Form Cepat Perbarui Status */}
-            <form onSubmit={handleUpdateStatus} className="rounded-2xl border border-[#d9e3f2] bg-[#f4f7fc] p-4 space-y-2.5">
-              <span className="text-xs font-bold tracking-wider text-[#1f4f8f] uppercase block">
-                Perbarui Status Aduan
-              </span>
-              <div className="flex flex-col gap-2">
-                <select
-                  value={newStatus}
-                  onChange={(e) => setNewStatus(e.target.value)}
-                  className="field py-2 text-xs font-bold text-[#173f78]"
-                >
-                  {statuses.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
+            {!readOnly && (
+              <form onSubmit={handleUpdateStatus} className="rounded-2xl border border-[#d9e3f2] bg-[#f4f7fc] p-4 space-y-2.5">
+                <span className="text-xs font-bold tracking-wider text-[#1f4f8f] uppercase block">
+                  Perbarui Status Aduan
+                </span>
+                <div className="flex flex-col gap-2">
+                  <select
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value)}
+                    className="field py-2 text-xs font-bold text-[#173f78]"
+                  >
+                    {statuses.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
 
-                <input
-                  className="field py-2 text-xs"
-                  placeholder="Catatan publik untuk pelapor (opsional)..."
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
-              </div>
+                  <input
+                    className="field py-2 text-xs"
+                    placeholder="Catatan publik untuk pelapor (opsional)..."
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
+                </div>
 
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  disabled={updating}
-                  className="btn-primary text-xs px-5 py-2"
-                >
-                  {updating ? "Menyimpan..." : "Simpan Status"}
-                </button>
-              </div>
-            </form>
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={updating}
+                    className="btn-primary text-xs px-5 py-2"
+                  >
+                    {updating ? "Menyimpan..." : "Simpan Status"}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
 
           {/* Footer Modal */}

@@ -1,7 +1,17 @@
 import { cookies } from "next/headers";
 
 export const TOKEN_COOKIE = "hallo_admin_token";
+export const ROLE_COOKIE = "hallo_admin_role";
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:4000/api";
+
+export type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+
+export interface AdminInfo {
+  role: AdminRole;
+  bidang: string | null;
+  displayName: string;
+  username: string;
+}
 
 type Context = { params: Promise<{ path: string[] }> };
 
@@ -38,6 +48,7 @@ export async function forward(
     // Hapus cookie kedaluwarsa agar redirect login tidak berputar.
     if (admin && response.status === 401) {
       (await cookies()).delete(TOKEN_COOKIE);
+      (await cookies()).delete(ROLE_COOKIE);
     }
     const outgoing = new Headers();
     ["content-type", "content-disposition"].forEach((name) => {

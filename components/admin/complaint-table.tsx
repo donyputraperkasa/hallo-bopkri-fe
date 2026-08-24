@@ -10,12 +10,14 @@ export function ComplaintTable({
   overrides,
   onOpenDetail,
   onOpenDispatch,
+  readOnly = false,
 }: {
   data: Complaint[];
   loading: boolean;
   overrides: Record<string, string[]>;
   onOpenDetail: (item: Complaint) => void;
   onOpenDispatch: (item: Complaint) => void;
+  readOnly?: boolean;
 }) {
   if (loading) {
     return (
@@ -116,13 +118,15 @@ export function ComplaintTable({
                 </td>
                 <td className="px-5 py-4 text-right whitespace-nowrap">
                   <div className="flex items-center justify-end gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onOpenDispatch(item)}
-                      className="inline-flex items-center gap-1 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-800 hover:bg-amber-100 shadow-2xs"
-                    >
-                      <SendHorizontal size={13} className="text-amber-700" /> Disposisi
-                    </button>
+                    {!readOnly && (
+                      <button
+                        type="button"
+                        onClick={() => onOpenDispatch(item)}
+                        className="inline-flex items-center gap-1 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-800 hover:bg-amber-100 shadow-2xs"
+                      >
+                        <SendHorizontal size={13} className="text-amber-700" /> Disposisi
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => onOpenDetail(item)}

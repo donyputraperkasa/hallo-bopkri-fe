@@ -14,9 +14,14 @@ import { ComplaintDetailModal } from "./complaint-detail-modal";
 import { ComplaintDispatchModal } from "./complaint-dispatch-modal";
 
 function extractTags(item: Complaint): string[] {
-  if (Array.isArray(item.tags) && item.tags.length > 0) return item.tags;
-  const raw = (item as unknown as Record<string, unknown>).tags ?? (item as unknown as Record<string, unknown>).tag;
-  return typeof raw === "string" && raw.trim() ? raw.split(",").map((t) => t.trim()).filter(Boolean) : [];
+  // Backend now stores tags as a comma-separated string
+  if (typeof item.tags === "string" && item.tags.trim()) {
+    return item.tags.split(",").map((t: string) => t.trim()).filter(Boolean);
+  }
+  if (typeof item.tag === "string" && item.tag.trim()) {
+    return item.tag.split(",").map((t: string) => t.trim()).filter(Boolean);
+  }
+  return [];
 }
 
 export function ComplaintList() {
@@ -75,11 +80,12 @@ export function ComplaintList() {
     hasAttachments: filtered.filter((i) => (i._count?.attachments ?? 0) > 0).length,
   }), [filtered]);
 
-  const onDispatch = (id: string, bidang: string) => {
-    const target = BIDANG_TAGS.find((b) => b.value === bidang);
-    const currentTags = overrides[id] ?? extractTags(filtered.find((i) => i.id === id) || ({} as Complaint));
-    setOverrides((prev) => ({ ...prev, [id]: Array.from(new Set([...currentTags, bidang])) }));
-    show(`Aduan berhasil didisposisikan ke ${target?.managerTitle ?? bidang}.`);
+  const onDispatch = (id: string, _adminId: string, bidang: string | null) => {
+    if (bidang) {
+      const currentTags = overrides[id] ?? extractTags(filtered.find((i) => i.id === id) || ({} as Complaint));
+      setOverrides((prev) => ({ ...prev, [id]: Array.from(new Set([...currentTags, bidang])) }));
+    }
+    show("Aduan berhasil didisposisikan.");
     setDispatchItem(null);
   };
 

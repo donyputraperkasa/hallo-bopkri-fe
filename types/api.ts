@@ -29,7 +29,7 @@ export interface Complaint {
   ticketCode: string;
   category: Category;
   tag?: string | null;
-  tags?: string[] | null;
+  tags?: string | null; // comma-separated string, e.g. "pendidikan,keuangan"
   reporterName?: string | null;
   contact?: string | null;
   content: string;

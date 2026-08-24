@@ -28,6 +28,12 @@ export function ComplaintForm() {
       ["reporterName", "contact"].forEach((name) => {
         if (!String(form.get(name) ?? "").trim()) form.delete(name);
       });
+      // Tag: ambil nilai dari hidden input 'tags' (comma-separated) yang dibuat oleh Tag component,
+      // lalu hapus input individual 'tag' agar tidak memicu forbidNonWhitelisted backend.
+      const tagsValue = String(form.get("tags") ?? "").trim();
+      form.delete("tag");   // hapus semua input name="tag" (individual hidden inputs)
+      form.delete("tags");  // hapus lalu re-set sebagai single value
+      if (tagsValue) form.set("tags", tagsValue);
       const files = form.getAll("attachments").filter((item) => item instanceof File && item.size);
       form.delete("attachments");
       files.forEach((file) => form.append("attachments", file));

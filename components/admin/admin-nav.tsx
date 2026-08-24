@@ -4,21 +4,38 @@ import Link from "next/link";
 import { ChartNoAxesColumn, ClipboardList, SlidersHorizontal } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-const menus = [
+type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+
+const ownerMenus = [
   ["Dashboard", "/masdon/dashboard", ChartNoAxesColumn],
   ["Daftar Aduan", "/masdon/aduan", ClipboardList],
   ["Status Aduan", "/masdon/status", SlidersHorizontal],
 ] as const;
 
-export function AdminNav() {
+const directorMenus = [
+  ["Dashboard", "/masdon/director/dashboard", ChartNoAxesColumn],
+  ["Semua Aduan", "/masdon/director/aduan", ClipboardList],
+] as const;
+
+const managerMenus = [
+  ["Dashboard", "/masdon/manager/dashboard", ChartNoAxesColumn],
+  ["Aduan Bidang Saya", "/masdon/manager/aduan", ClipboardList],
+] as const;
+
+function getMenus(role: AdminRole) {
+  if (role === "DIRECTOR") return directorMenus;
+  if (role === "MANAGER") return managerMenus;
+  return ownerMenus;
+}
+
+export function AdminNav({ role = "OWNER" }: { role?: AdminRole }) {
   const pathname = usePathname();
+  const menus = getMenus(role);
 
   return (
     <nav className="mt-7 flex gap-2 overflow-x-auto lg:flex-col">
       {menus.map(([label, href, Icon]) => {
-        const active = href === "/masdon/aduan"
-          ? pathname.startsWith(href)
-          : pathname === href;
+        const active = pathname.startsWith(href);
         return (
           <Link
             key={href}
