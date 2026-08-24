@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { ArrowRight, LockKeyhole, ShieldCheck } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, User } from "lucide-react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
 
@@ -17,6 +17,7 @@ export function LoginForm() {
   const { show } = useToast();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,52 +46,63 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={login} className="surface relative w-full max-w-md p-7 sm:p-9 border border-stone-200/90 shadow-xl">
-      <div className="flex items-center justify-between">
-        <span className="grid size-12 place-items-center rounded-2xl bg-[#eaf1fb] text-[#1f4f8f] shadow-xs">
-          <LockKeyhole size={23} />
-        </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50/80 px-3 py-1 text-xs font-bold text-amber-800">
-          <ShieldCheck size={13} /> Akses Sistem
-        </span>
-      </div>
-
-      <h1 className="mt-6 text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
-        Masuk ke sistem
-      </h1>
-      <p className="mt-2 text-sm leading-6 text-stone-500">
-        Gunakan akun yang telah diberikan oleh owner sistem.
-      </p>
-
-      <div className="mt-6 space-y-4.5">
-        <label className="block">
-          <span className="label text-stone-800">Username</span>
+    <form onSubmit={login} className="space-y-4">
+      <label className="block">
+        <span className="text-sm font-semibold text-[#2b3445]">Username</span>
+        <span className="mt-2 flex h-12 items-center gap-3 rounded-md border border-[#ced9eb] bg-[#f8fbff] px-3 transition focus-within:border-[#0f2a4f] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0f2a4f]/15">
+          <span className="text-[#728199]">
+            <User size={18} />
+          </span>
           <input
-            className="field"
-            name="username"
             autoComplete="username"
-            placeholder="Masukkan username Anda"
+            className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#9aa6b8] text-[#172033]"
+            disabled={loading}
+            name="username"
+            placeholder="Masukkan username admin"
             required
           />
-        </label>
+        </span>
+      </label>
 
-        <label className="block">
-          <span className="label text-stone-800">Password</span>
+      <label className="block">
+        <span className="text-sm font-semibold text-[#2b3445]">Password</span>
+        <span className="mt-2 flex h-12 items-center gap-3 rounded-md border border-[#ced9eb] bg-[#f8fbff] px-3 transition focus-within:border-[#0f2a4f] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0f2a4f]/15">
+          <span className="text-[#728199]">
+            <LockKeyhole size={18} />
+          </span>
           <input
-            className="field"
-            type="password"
-            name="password"
             autoComplete="current-password"
-            placeholder="Masukkan password Anda"
+            className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#9aa6b8] text-[#172033]"
+            disabled={loading}
+            name="password"
+            placeholder="Masukkan password"
             required
+            type={isPasswordVisible ? "text" : "password"}
           />
-        </label>
-      </div>
+          <button
+            type="button"
+            onClick={() => setIsPasswordVisible((value) => !value)}
+            className="flex h-8 w-8 items-center justify-center rounded-md text-[#728199] transition hover:bg-[#eef3fb] hover:text-[#0f2a4f]"
+            aria-label={isPasswordVisible ? "Sembunyikan password" : "Tampilkan password"}
+          >
+            {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </span>
+      </label>
 
-      {error && <p className="error-box mt-5">{error}</p>}
+      {error ? (
+        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      ) : null}
 
-      <button className="btn-primary mt-6 w-full shadow-md" disabled={loading}>
-        {loading ? "Memeriksa..." : "Masuk"} <ArrowRight size={18} />
+      <button
+        type="submit"
+        disabled={loading}
+        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#0f2a4f] text-sm font-semibold text-white shadow-lg shadow-[#0f2a4f]/20 transition hover:bg-[#173b6b] disabled:cursor-not-allowed disabled:bg-[#7f98bd]"
+      >
+        {loading ? "Memeriksa..." : "Masuk ke Panel"}
+        <ArrowRight size={17} aria-hidden="true" />
       </button>
     </form>
   );

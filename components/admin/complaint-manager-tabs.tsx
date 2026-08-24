@@ -11,19 +11,19 @@ export function ComplaintManagerTabs({
   onSelectBidang: (bidang: string) => void;
 }) {
   return (
-    <div className="surface p-2 overflow-x-auto">
+    <div className="rounded-lg border border-[#dbe5f4] bg-white p-2 shadow-sm overflow-x-auto">
       <div className="flex min-w-max items-center gap-1.5 p-1">
         <button
           type="button"
           onClick={() => onSelectBidang("all")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold transition-all ${
+          className={`flex items-center gap-2 rounded-md px-4 py-2 text-xs sm:text-sm font-semibold transition ${
             activeBidang === "all"
-              ? "bg-[#1f4f8f] text-white shadow-md"
-              : "text-slate-600 hover:bg-slate-100 hover:text-[#173f78]"
+              ? "bg-[#0f2a4f] text-white shadow-xs"
+              : "text-[#526078] hover:bg-[#f8fbff] hover:text-[#0f2a4f]"
           }`}
         >
           <Building2 size={16} />
-          <span>Semua</span>
+          <span>Semua Bidang</span>
         </button>
 
         {BIDANG_TAGS.map((item) => {
@@ -34,13 +34,13 @@ export function ComplaintManagerTabs({
               key={item.value}
               type="button"
               onClick={() => onSelectBidang(item.value)}
-              className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold transition-all ${
+              className={`flex items-center gap-2 rounded-md px-4 py-2 text-xs sm:text-sm font-semibold transition ${
                 isSelected
-                  ? "bg-[#1f4f8f] text-white shadow-md"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-[#173f78]"
+                  ? "bg-[#0f2a4f] text-white shadow-xs"
+                  : "text-[#526078] hover:bg-[#f8fbff] hover:text-[#0f2a4f]"
               }`}
             >
-              <ItemIcon size={16} className={isSelected ? "text-white" : "text-slate-500"} />
+              <ItemIcon size={16} className={isSelected ? "text-white" : "text-[#748299]"} />
               <span>{item.label}</span>
             </button>
           );

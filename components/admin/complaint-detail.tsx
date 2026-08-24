@@ -49,8 +49,6 @@ export function ComplaintDetail({ id }: { id: string }) {
   }, [id]);
 
   useEffect(() => {
-    // Pemanggilan asinkron pertama untuk mengisi halaman detail.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
   }, [load]);
 
@@ -69,34 +67,51 @@ export function ComplaintDetail({ id }: { id: string }) {
     }
   };
 
-  if (error) return <p className="error-box">{error}</p>;
-  if (!item) return <LoaderCircle className="animate-spin text-[#1f4f8f]" />;
+  if (error) {
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        {error}
+      </div>
+    );
+  }
+
+  if (!item) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <Link href="/masdon/aduan" className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-slate-800">
-        <ArrowLeft size={17} /> Kembali ke Daftar Aduan
+    <div className="space-y-5">
+      <Link
+        href="/masdon/aduan"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-[#0f2a4f] hover:underline"
+      >
+        <ArrowLeft size={16} /> Kembali ke Daftar Aduan
       </Link>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_340px]">
+
+      <div className="grid gap-5 xl:grid-cols-[1fr_340px]">
         <div className="space-y-5">
-          <article className="surface p-6 border border-stone-200/90 shadow-md">
-            <div className="flex flex-wrap justify-between gap-4">
+          <article className="rounded-lg border border-[#dbe5f4] bg-white p-6 shadow-sm">
+            <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-sm font-bold text-[#1f4f8f]">{item.ticketCode}</p>
-                <h1 className="mt-2 text-2xl font-extrabold text-stone-900">{categoryLabel(item.category)}</h1>
+                <span className="font-mono text-sm font-semibold text-[#1f4f8f]">{item.ticketCode}</span>
+                <h1 className="mt-1 text-2xl font-semibold text-[#0f172a]">{categoryLabel(item.category)}</h1>
               </div>
               <span
-                className="h-fit rounded-full px-4 py-2 text-sm font-bold shadow-2xs"
+                className="rounded-full px-3 py-1 text-xs font-semibold"
                 style={{ color: item.status.color, background: `${item.status.color}18` }}
               >
                 {item.status.name}
               </span>
             </div>
 
-            {/* Tag / Bidang Badges dengan Lucide Icons */}
+            {/* Tag / Bidang Badges */}
             {activeTags.length > 0 && (
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="flex items-center gap-1 text-xs font-semibold text-stone-400">
+                <span className="flex items-center gap-1 text-xs font-semibold text-[#748299]">
                   <TagIcon size={13} /> Bidang Terkait:
                 </span>
                 {activeTags.map((t) => {
@@ -105,7 +120,7 @@ export function ComplaintDetail({ id }: { id: string }) {
                   return (
                     <span
                       key={t}
-                      className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold ${getTagStyle(t)}`}
+                      className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold ${getTagStyle(t)}`}
                     >
                       {TagIconComponent && <TagIconComponent size={13} />}
                       <span>{tagInfo?.label ?? t}</span>
@@ -115,52 +130,61 @@ export function ComplaintDetail({ id }: { id: string }) {
               </div>
             )}
 
-            <dl className="mt-6 grid gap-4 border-y border-slate-100 py-5 text-sm sm:grid-cols-3">
+            <dl className="mt-6 grid gap-4 border-y border-[#dbe5f4] py-5 text-sm sm:grid-cols-3">
               <div>
-                <dt className="text-slate-400">Pelapor</dt>
-                <dd className="mt-1 font-bold text-stone-800">{item.reporterName || "Anonim"}</dd>
+                <dt className="text-xs font-semibold text-[#748299]">Pelapor</dt>
+                <dd className="mt-1 font-semibold text-[#172033]">{item.reporterName || "Anonim"}</dd>
               </div>
               <div>
-                <dt className="text-slate-400">Kontak</dt>
-                <dd className="mt-1 font-bold text-stone-800">{item.contact || "-"}</dd>
+                <dt className="text-xs font-semibold text-[#748299]">Kontak</dt>
+                <dd className="mt-1 font-semibold text-[#172033]">{item.contact || "-"}</dd>
               </div>
               <div>
-                <dt className="text-slate-400">Dikirim</dt>
-                <dd className="mt-1 font-bold text-stone-800">{formatDate(item.createdAt)}</dd>
+                <dt className="text-xs font-semibold text-[#748299]">Dikirim</dt>
+                <dd className="mt-1 font-semibold text-[#172033]">{formatDate(item.createdAt)}</dd>
               </div>
             </dl>
-            <h2 className="mt-6 font-extrabold text-stone-900">Isi aduan</h2>
-            <p className="mt-3 whitespace-pre-wrap leading-7 text-slate-700">{item.content}</p>
+
+            <h2 className="mt-6 font-semibold text-[#0f172a]">Isi Aduan</h2>
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[#172033] bg-[#f8fbff] p-4 rounded-md border border-[#dbe5f4]">
+              {item.content}
+            </p>
           </article>
 
-          <article className="surface p-6 border border-stone-200/90 shadow-md">
-            <h2 className="font-extrabold text-stone-900">Lampiran bukti ({item.attachments?.length ?? 0})</h2>
+          <article className="rounded-lg border border-[#dbe5f4] bg-white p-6 shadow-sm">
+            <h2 className="font-semibold text-[#0f172a]">Lampiran Bukti ({item.attachments?.length ?? 0})</h2>
             <div className="mt-4 space-y-2">
               {item.attachments?.map((file) => (
                 <a
                   key={file.id}
                   href={`/api/admin/complaints/attachments/${file.id}`}
-                  className="flex items-center justify-between rounded-xl bg-slate-50 p-4 text-sm font-bold transition hover:bg-slate-100"
+                  className="flex items-center justify-between rounded-md border border-[#dbe5f4] bg-[#f8fbff] p-3 text-xs font-semibold text-[#172033] transition hover:border-[#b6cce8] hover:bg-white"
                 >
                   <span className="truncate">
                     {file.originalName}{" "}
-                    <small className="font-normal text-slate-400">({formatBytes(file.size)})</small>
+                    <small className="font-normal text-[#8b98ad]">({formatBytes(file.size)})</small>
                   </span>
-                  <Download className="shrink-0" size={17} />
+                  <Download className="shrink-0 text-[#0f2a4f]" size={16} />
                 </a>
               ))}
-              {!item.attachments?.length && <p className="text-sm text-slate-400">Tidak ada lampiran.</p>}
+              {!item.attachments?.length && (
+                <p className="text-xs text-[#8b98ad] italic">Tidak ada lampiran.</p>
+              )}
             </div>
           </article>
 
-          <article className="surface p-6 border border-stone-200/90 shadow-md">
-            <h2 className="font-extrabold text-stone-900">Riwayat penanganan</h2>
-            <div className="mt-4 space-y-4">
+          <article className="rounded-lg border border-[#dbe5f4] bg-white p-6 shadow-sm">
+            <h2 className="font-semibold text-[#0f172a]">Riwayat Penanganan</h2>
+            <div className="mt-4 space-y-3">
               {item.histories?.map((history) => (
                 <div key={history.id} className="border-l-2 pl-4" style={{ borderColor: history.status.color }}>
-                  <p className="font-bold">{history.status.name}</p>
-                  <p className="text-xs text-slate-400">{formatDate(history.createdAt)}</p>
-                  {history.publicNote && <p className="mt-1 text-sm text-slate-600">{history.publicNote}</p>}
+                  <p className="font-semibold text-xs text-[#0f172a]">{history.status.name}</p>
+                  <p className="text-[11px] text-[#748299]">{formatDate(history.createdAt)}</p>
+                  {history.publicNote && (
+                    <p className="mt-1 text-xs text-[#526078] bg-[#f8fbff] p-2.5 rounded-md border border-[#dbe5f4]">
+                      {history.publicNote}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -169,12 +193,12 @@ export function ComplaintDetail({ id }: { id: string }) {
 
         <aside className="space-y-5">
           {/* Card Disposisi ke Bidang */}
-          <div className="surface p-6 border border-stone-200/90 shadow-md">
+          <div className="rounded-lg border border-[#dbe5f4] bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2">
-              <SendHorizontal size={18} className="text-[#1f4f8f]" />
-              <h3 className="font-bold text-stone-900 text-base">Disposisi ke Bidang</h3>
+              <SendHorizontal size={18} className="text-[#0f2a4f]" />
+              <h3 className="font-semibold text-[#0f172a] text-base">Disposisi ke Bidang</h3>
             </div>
-            <p className="mt-1 text-xs text-stone-500">
+            <p className="mt-1 text-xs text-[#748299]">
               Teruskan aduan ini ke manajer bidang terkait.
             </p>
 
@@ -188,17 +212,17 @@ export function ComplaintDetail({ id }: { id: string }) {
                       key={b.value}
                       type="button"
                       onClick={() => setDispatchBidang(b.value)}
-                      className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold transition ${
+                      className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-xs font-semibold transition ${
                         isSelected
-                          ? "border-[#1f4f8f] bg-[#1f4f8f]/10 text-[#1f4f8f]"
-                          : "border-stone-200 bg-stone-50/70 text-stone-700 hover:bg-stone-100"
+                          ? "border-[#0f2a4f] bg-[#eef4fb] text-[#0f2a4f] ring-1 ring-[#0f2a4f]"
+                          : "border-[#dbe5f4] bg-[#f8fbff] text-[#172033] hover:border-[#b6cce8] hover:bg-white"
                       }`}
                     >
                       <span className="flex items-center gap-2 truncate">
-                        <BidangIcon size={14} className={isSelected ? "text-[#1f4f8f]" : "text-stone-500"} />
+                        <BidangIcon size={14} className={isSelected ? "text-[#0f2a4f]" : "text-[#748299]"} />
                         <span>{b.label}</span>
                       </span>
-                      {isSelected && <Check size={14} className="text-[#1f4f8f] shrink-0" />}
+                      {isSelected && <Check size={14} className="text-[#0f2a4f] shrink-0" />}
                     </button>
                   );
                 })}
@@ -207,7 +231,7 @@ export function ComplaintDetail({ id }: { id: string }) {
               <button
                 type="submit"
                 disabled={isDispatching}
-                className="btn-primary w-full text-xs font-bold mt-2 shadow-sm"
+                className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-md bg-[#0f2a4f] text-xs font-semibold text-white transition hover:bg-[#173b6b] disabled:opacity-50"
               >
                 <SendHorizontal size={14} />
                 <span>{isDispatching ? "Mengirim..." : "Kirim ke Bidang"}</span>

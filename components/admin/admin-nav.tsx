@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChartNoAxesColumn, ClipboardList, SlidersHorizontal } from "lucide-react";
+import { ChartNoAxesColumn, ClipboardList, SlidersHorizontal, ArrowLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
@@ -28,28 +28,54 @@ function getMenus(role: AdminRole) {
   return ownerMenus;
 }
 
-export function AdminNav({ role = "OWNER" }: { role?: AdminRole }) {
+export function AdminNav({
+  role = "OWNER",
+  onItemClick,
+}: {
+  role?: AdminRole;
+  onItemClick?: () => void;
+}) {
   const pathname = usePathname();
   const menus = getMenus(role);
 
   return (
-    <nav className="mt-7 flex gap-2 overflow-x-auto lg:flex-col">
+    <nav className="space-y-1">
       {menus.map(([label, href, Icon]) => {
-        const active = pathname.startsWith(href);
+        const active =
+          pathname === href ||
+          (href !== "/masdon/dashboard" &&
+            href !== "/masdon/director/dashboard" &&
+            href !== "/masdon/manager/dashboard" &&
+            pathname.startsWith(href));
+
         return (
           <Link
             key={href}
             href={href}
-            className={`flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold ${
+            onClick={onItemClick}
+            className={[
+              "flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold transition",
               active
-                ? "bg-white text-[#1f4f8f] shadow-lg"
-                : "text-blue-100 hover:bg-white/10 hover:text-white"
-            }`}
+                ? "bg-[#f2d35f] text-[#172033] shadow-sm"
+                : "text-[#d7e4f5] hover:bg-white/12 hover:text-white",
+            ].join(" ")}
           >
-            <Icon size={18} /> {label}
+            <Icon size={18} aria-hidden="true" />
+            {label}
           </Link>
         );
       })}
+
+      <div className="pt-3">
+        <Link
+          href="/"
+          onClick={onItemClick}
+          className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold text-[#b8c8df] hover:bg-white/12 hover:text-white transition"
+        >
+          <ArrowLeft size={18} aria-hidden="true" />
+          Halaman Publik
+        </Link>
+      </div>
     </nav>
   );
 }

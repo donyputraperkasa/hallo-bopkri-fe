@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, FileText, Landmark } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileText, SendHorizontal } from "lucide-react";
 import { api } from "@/lib/client-api";
 import { BIDANG_TAGS, getTagStyle } from "@/lib/constants";
 import type { Complaint, ComplaintList as ListData, ComplaintStatus } from "@/types/api";
@@ -14,7 +14,6 @@ import { ComplaintDetailModal } from "./complaint-detail-modal";
 import { ComplaintDispatchModal } from "./complaint-dispatch-modal";
 
 function extractTags(item: Complaint): string[] {
-  // Backend now stores tags as a comma-separated string
   if (typeof item.tags === "string" && item.tags.trim()) {
     return item.tags.split(",").map((t: string) => t.trim()).filter(Boolean);
   }
@@ -90,29 +89,37 @@ export function ComplaintList() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-3xl border border-stone-200/90 bg-gradient-to-r from-[#173f78] via-[#1f4f8f] to-[#29328f] p-6 text-white shadow-xl shadow-[#1f4f8f]/10 sm:p-8">
-        <div className="pointer-events-none absolute -top-20 -right-16 size-72 rounded-full border-32 border-white/5" />
-        <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-amber-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#f2d35f]">
-          <Landmark size={14} /> Portal Disposisi & Aduan Manajer Bidang
+    <div className="space-y-5">
+      {/* Header Banner */}
+      <section className="rounded-lg border border-[#dbe5f4] bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-lg font-semibold text-[#0f172a]">Daftar Aduan Masuk</h2>
+          <p className="text-sm text-[#748299]">
+            Kelola, telusuri, dan teruskan laporan masyarakat ke masing-masing bidang tugas terkait.
+          </p>
         </div>
-        <h1 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight">Daftar Aduan Masuk</h1>
-        <p className="mt-2 text-sm text-blue-100/90">Kelola dan teruskan laporan masyarakat ke masing-masing bidang tugas.</p>
-      </div>
+      </section>
 
       <ComplaintManagerTabs activeBidang={activeBidang} onSelectBidang={handleTabChange} />
       <ComplaintStatsCards activeBidang={activeBidang} stats={stats} />
       <ComplaintFilters statuses={statuses} query={query} setQuery={setQuery} />
-      {error && <p className="error-box">{error}</p>}
 
-      <section className="surface border border-stone-200/90 shadow-md overflow-hidden">
-        <div className="border-b border-stone-200 bg-stone-50/80 px-6 py-4 flex items-center justify-between">
+      {error ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
+      ) : null}
+
+      <section className="rounded-lg border border-[#dbe5f4] bg-white shadow-sm overflow-hidden">
+        <div className="border-b border-[#dbe5f4] bg-[#f8fbff] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <FileText size={18} className="text-[#1f4f8f]" />
-            <h2 className="font-bold text-stone-800 text-base">Aduan Masuk ({filtered.length})</h2>
+            <FileText size={18} className="text-[#0f2a4f]" />
+            <h3 className="font-semibold text-[#0f172a] text-sm sm:text-base">
+              Aduan Masuk ({filtered.length})
+            </h3>
           </div>
           {activeBidang !== "all" && (
-            <span className={`rounded-md border px-2.5 py-0.5 text-xs font-bold ${getTagStyle(activeBidang)}`}>
+            <span className={`rounded-md border px-2.5 py-0.5 text-xs font-semibold ${getTagStyle(activeBidang)}`}>
               {BIDANG_TAGS.find((b) => b.value === activeBidang)?.label}
             </span>
           )}
@@ -127,19 +134,47 @@ export function ComplaintList() {
         />
 
         {data && (
-          <footer className="flex items-center justify-between border-t border-stone-200 bg-stone-50/50 p-4">
-            <p className="text-xs text-stone-500">Menampilkan <strong>{filtered.length}</strong> dari <strong>{data.meta.total}</strong> total aduan</p>
+          <footer className="flex items-center justify-between border-t border-[#dbe5f4] bg-[#f8fbff] p-4 text-xs text-[#748299]">
+            <p>
+              Menampilkan <strong>{filtered.length}</strong> dari <strong>{data.meta.total}</strong> total aduan
+            </p>
             <div className="flex items-center gap-2">
-              <button className="btn-secondary p-2" disabled={data.meta.page <= 1} onClick={() => handlePage(data.meta.page - 1)}><ChevronLeft size={16} /></button>
-              <span className="text-xs font-bold text-stone-700">{data.meta.page} / {data.meta.totalPages || 1}</span>
-              <button className="btn-secondary p-2" disabled={data.meta.page >= data.meta.totalPages} onClick={() => handlePage(data.meta.page + 1)}><ChevronRight size={16} /></button>
+              <button
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={data.meta.page <= 1}
+                onClick={() => handlePage(data.meta.page - 1)}
+                aria-label="Halaman sebelumnya"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="font-semibold text-[#172033]">
+                {data.meta.page} / {data.meta.totalPages || 1}
+              </span>
+              <button
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={data.meta.page >= data.meta.totalPages}
+                onClick={() => handlePage(data.meta.page + 1)}
+                aria-label="Halaman berikutnya"
+              >
+                <ChevronRight size={16} />
+              </button>
             </div>
           </footer>
         )}
       </section>
 
-      <ComplaintDetailModal item={detailItem} statuses={statuses} onClose={() => setDetailItem(null)} onOpenDispatch={(c) => setDispatchItem(c)} onStatusUpdated={load} />
-      <ComplaintDispatchModal item={dispatchItem} onClose={() => setDispatchItem(null)} onDispatch={onDispatch} />
+      <ComplaintDetailModal
+        item={detailItem}
+        statuses={statuses}
+        onClose={() => setDetailItem(null)}
+        onOpenDispatch={(c) => setDispatchItem(c)}
+        onStatusUpdated={load}
+      />
+      <ComplaintDispatchModal
+        item={dispatchItem}
+        onClose={() => setDispatchItem(null)}
+        onDispatch={onDispatch}
+      />
     </div>
   );
 }

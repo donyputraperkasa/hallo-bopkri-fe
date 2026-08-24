@@ -97,14 +97,6 @@ export const BIDANG_TAGS: BidangTagConfig[] = [
     badgeColor: "#be123c",
   },
   {
-    value: "sekretariat",
-    label: "Sekretariat",
-    managerTitle: "Manajer Bidang Sekretariat",
-    icon: FileText,
-    colorClass: "border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200",
-    badgeColor: "#334155",
-  },
-  {
     value: "lainnya",
     label: "Lainnya / Umum",
     managerTitle: "Manajer Bidang Umum & Lainnya",

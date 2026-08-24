@@ -9,7 +9,7 @@ interface LogoutButtonProps {
   variant?: "header" | "sidebar";
 }
 
-export function LogoutButton({ variant = "header" }: LogoutButtonProps) {
+export function LogoutButton({ variant = "sidebar" }: LogoutButtonProps) {
   const router = useRouter();
   const { show } = useToast();
 
@@ -28,9 +28,9 @@ export function LogoutButton({ variant = "header" }: LogoutButtonProps) {
     return (
       <button
         onClick={logout}
-        className="flex w-full items-center gap-2.5 rounded-xl border border-white/15 bg-white/8 px-4 py-3 text-sm font-bold text-white/70 transition hover:border-red-400/30 hover:bg-red-500/15 hover:text-red-300"
+        className="flex w-full items-center justify-center gap-2 rounded-md border border-white/20 bg-white/5 py-2.5 text-xs font-semibold text-white transition hover:bg-white/12 cursor-pointer"
       >
-        <LogOut size={16} />
+        <LogOut size={14} />
         <span>Keluar</span>
       </button>
     );
@@ -39,9 +39,9 @@ export function LogoutButton({ variant = "header" }: LogoutButtonProps) {
   return (
     <button
       onClick={logout}
-      className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-red-500 transition"
+      className="flex items-center gap-2 text-xs font-semibold text-[#748299] hover:text-red-500 transition cursor-pointer"
     >
-      <LogOut size={17} /> Keluar
+      <LogOut size={15} /> Keluar
     </button>
   );
 }

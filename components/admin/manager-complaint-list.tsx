@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
 import { api } from "@/lib/client-api";
 import { getTagStyle, BIDANG_TAGS } from "@/lib/constants";
 import { useAuth } from "@/hooks/use-auth";
@@ -52,10 +52,9 @@ export function ManagerComplaintList() {
   const tagInfo = BIDANG_TAGS.find((b) => b.value.toLowerCase() === bidang.toLowerCase());
   const BidangIcon = tagInfo?.icon;
 
-  // Filter: hanya tampilkan aduan yang tag-nya cocok dengan bidang manager
   const filtered = useMemo(() => {
     if (!data?.data) return [];
-    if (!bidang) return data.data; // fallback: tampilkan semua jika bidang tidak diset
+    if (!bidang) return data.data;
     return data.data.filter((item) => {
       const tags = extractTags(item);
       return tags.some((t) => t.toLowerCase() === bidang.toLowerCase());
@@ -63,34 +62,45 @@ export function ManagerComplaintList() {
   }, [data, bidang]);
 
   return (
-    <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-3xl border border-stone-200/90 bg-gradient-to-r from-[#1a3a2a] via-[#1e5c3a] to-[#1a6b44] p-6 text-white shadow-xl sm:p-8">
-        <div className="pointer-events-none absolute -top-20 -right-16 size-72 rounded-full border-32 border-white/5" />
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-200">
-          <Users size={14} /> Aduan Bidang Anda
+    <div className="space-y-5">
+      {/* Header Banner */}
+      <section className="rounded-lg border border-[#dbe5f4] bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[#0f172a]">
+              {tagInfo?.label ? `Aduan Bidang ${tagInfo.label}` : "Aduan Bidang Anda"}
+            </h2>
+            {bidang && (
+              <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-semibold ${getTagStyle(bidang)}`}>
+                {BidangIcon && <BidangIcon size={12} />}
+                {tagInfo?.label ?? bidang}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-[#748299]">
+            Menampilkan laporan masyarakat yang sudah didisposisikan oleh owner ke bidang Anda.
+          </p>
         </div>
-        <h1 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight">
-          {tagInfo?.label ?? bidang ? `Bidang ${tagInfo?.label ?? bidang}` : "Aduan Saya"}
-        </h1>
-        <p className="mt-2 text-sm text-emerald-100/90">
-          Menampilkan aduan yang sudah didisposisikan oleh owner kepada Anda.
-        </p>
-        {bidang && (
-          <span className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold bg-white/10 border-white/20 text-white`}>
-            {BidangIcon && <BidangIcon size={12} />}
-            {tagInfo?.label ?? bidang}
-          </span>
-        )}
-      </div>
+      </section>
 
       <ComplaintFilters statuses={statuses} query={query} setQuery={setQuery} />
-      {error && <p className="error-box">{error}</p>}
 
-      <section className="surface border border-stone-200/90 shadow-md overflow-hidden">
-        <div className="border-b border-stone-200 bg-stone-50/80 px-6 py-4 flex items-center justify-between">
-          <h2 className="font-bold text-stone-800">Aduan Bidang ({filtered.length})</h2>
+      {error ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
+      ) : null}
+
+      <section className="rounded-lg border border-[#dbe5f4] bg-white shadow-sm overflow-hidden">
+        <div className="border-b border-[#dbe5f4] bg-[#f8fbff] px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <FileText size={18} className="text-[#0f2a4f]" />
+            <h3 className="font-semibold text-[#0f172a] text-sm sm:text-base">
+              Aduan Bidang ({filtered.length})
+            </h3>
+          </div>
           {bidang && (
-            <span className={`rounded-md border px-2.5 py-0.5 text-xs font-bold ${getTagStyle(bidang)}`}>
+            <span className={`rounded-md border px-2.5 py-0.5 text-xs font-semibold ${getTagStyle(bidang)}`}>
               {tagInfo?.label ?? bidang}
             </span>
           )}
@@ -106,14 +116,30 @@ export function ManagerComplaintList() {
         />
 
         {data && (
-          <footer className="flex items-center justify-between border-t border-stone-200 bg-stone-50/50 p-4">
-            <p className="text-xs text-stone-500">
+          <footer className="flex items-center justify-between border-t border-[#dbe5f4] bg-[#f8fbff] p-4 text-xs text-[#748299]">
+            <p>
               Menampilkan <strong>{filtered.length}</strong> aduan bidang dari <strong>{data.meta.total}</strong> total diterima
             </p>
             <div className="flex items-center gap-2">
-              <button className="btn-secondary p-2" disabled={data.meta.page <= 1} onClick={() => handlePage(data.meta.page - 1)}><ChevronLeft size={16} /></button>
-              <span className="text-xs font-bold text-stone-700">{data.meta.page} / {data.meta.totalPages || 1}</span>
-              <button className="btn-secondary p-2" disabled={data.meta.page >= data.meta.totalPages} onClick={() => handlePage(data.meta.page + 1)}><ChevronRight size={16} /></button>
+              <button
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={data.meta.page <= 1}
+                onClick={() => handlePage(data.meta.page - 1)}
+                aria-label="Halaman sebelumnya"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="font-semibold text-[#172033]">
+                {data.meta.page} / {data.meta.totalPages || 1}
+              </span>
+              <button
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={data.meta.page >= data.meta.totalPages}
+                onClick={() => handlePage(data.meta.page + 1)}
+                aria-label="Halaman berikutnya"
+              >
+                <ChevronRight size={16} />
+              </button>
             </div>
           </footer>
         )}

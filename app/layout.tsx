@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { DM_Sans, Manrope } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { ToastProvider } from "@/components/ui/toast-provider";
+import { Toaster } from "@/components/feedback/toaster";
 import "./globals.css";
 
-const bodyFont = DM_Sans({ subsets: ["latin"], variable: "--font-body" });
-const headingFont = Manrope({ subsets: ["latin"], variable: "--font-heading" });
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: { default: "Hallo BOPKRI", template: "%s | Hallo BOPKRI" },
@@ -13,9 +21,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id">
-      <body className={`${bodyFont.variable} ${headingFont.variable}`}>
-        <ToastProvider>{children}</ToastProvider>
+    <html
+      lang="id"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col font-sans">
+        <ToastProvider>
+          {children}
+          <Toaster />
+        </ToastProvider>
       </body>
     </html>
   );

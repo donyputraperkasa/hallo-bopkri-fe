@@ -72,27 +72,29 @@ export function ComplaintDispatchModal({
 
   return (
     <div
-      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/60 backdrop-blur-xs animate-in fade-in duration-200"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 grid place-items-center bg-[#071529]/55 p-4 backdrop-blur-sm modal-backdrop-enter overflow-y-auto"
     >
       <div
         onMouseDown={(e) => e.stopPropagation()}
-        className="w-full max-w-lg rounded-3xl border border-stone-200 bg-white p-6 sm:p-7 shadow-2xl animate-in zoom-in-95 duration-200"
+        className="w-full max-w-lg rounded-xl border border-[#dbe5f4] bg-white p-6 shadow-2xl modal-panel-enter"
       >
-        <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+        <div className="flex items-center justify-between border-b border-[#dbe5f4] pb-4">
           <div className="flex items-center gap-2.5">
-            <span className="grid size-9 place-items-center rounded-xl bg-amber-100 text-amber-800">
+            <span className="grid size-9 place-items-center rounded-lg bg-amber-100 text-amber-800">
               <SendHorizontal size={18} />
             </span>
             <div>
-              <h3 className="font-extrabold text-stone-900 text-base">Disposisi Aduan</h3>
-              <p className="text-xs text-stone-500 font-mono">Tiket: {item.ticketCode}</p>
+              <h3 className="font-semibold text-[#0f172a] text-base">Disposisi Aduan</h3>
+              <p className="text-xs text-[#748299] font-mono">Tiket: {item.ticketCode}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-600 transition"
+            className="rounded-md p-1.5 text-[#748299] hover:bg-[#eef4fb] hover:text-[#0f2a4f] transition"
           >
             <X size={18} />
           </button>
@@ -100,18 +102,18 @@ export function ComplaintDispatchModal({
 
         {loadingUsers ? (
           <div className="flex justify-center py-8">
-            <LoaderCircle className="size-8 animate-spin text-[#1f4f8f]" />
+            <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-5 space-y-4.5">
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
             <div>
-              <label className="label text-stone-800 text-xs uppercase tracking-wider">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#748299]">
                 Pilih Penerima Disposisi
               </label>
 
               {directors.length > 0 && (
                 <div className="mt-2">
-                  <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                  <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#748299] mb-1.5">
                     <Briefcase size={11} /> Direktur
                   </p>
                   <div className="space-y-1.5">
@@ -122,17 +124,17 @@ export function ComplaintDispatchModal({
                           key={u.id}
                           type="button"
                           onClick={() => setSelectedId(u.id)}
-                          className={`flex w-full items-center justify-between rounded-xl border p-2.5 text-left text-xs font-semibold transition ${
+                          className={`flex w-full items-center justify-between rounded-lg border p-2.5 text-left text-xs font-semibold transition ${
                             isSelected
-                              ? "border-sky-400 bg-sky-50 text-sky-800 ring-2 ring-sky-200"
-                              : "border-stone-200 bg-stone-50/70 text-stone-700 hover:border-stone-300 hover:bg-stone-100"
+                              ? "border-[#0f2a4f] bg-[#eef4fb] text-[#0f2a4f] ring-1 ring-[#0f2a4f]"
+                              : "border-[#dbe5f4] bg-[#f8fbff] text-[#172033] hover:border-[#b6cce8] hover:bg-white"
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            <Briefcase size={15} className={isSelected ? "text-sky-600" : "text-stone-400"} />
+                            <Briefcase size={15} className={isSelected ? "text-[#0f2a4f]" : "text-[#748299]"} />
                             <span>{u.displayName ?? u.username}</span>
                           </div>
-                          {isSelected && <Check size={14} className="text-sky-600" />}
+                          {isSelected && <Check size={14} className="text-[#0f2a4f]" />}
                         </button>
                       );
                     })}
@@ -142,7 +144,7 @@ export function ComplaintDispatchModal({
 
               {managers.length > 0 && (
                 <div className="mt-3">
-                  <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                  <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#748299] mb-1.5">
                     <Users size={11} /> Manajer Bidang
                   </p>
                   <div className="grid grid-cols-2 gap-1.5">
@@ -153,14 +155,14 @@ export function ComplaintDispatchModal({
                           key={u.id}
                           type="button"
                           onClick={() => setSelectedId(u.id)}
-                          className={`flex items-center justify-between rounded-xl border p-2.5 text-left text-xs font-semibold transition ${
+                          className={`flex items-center justify-between rounded-lg border p-2.5 text-left text-xs font-semibold transition ${
                             isSelected
-                              ? "border-[#1f4f8f] bg-[#1f4f8f]/10 text-[#1f4f8f] ring-2 ring-[#1f4f8f]/20"
-                              : "border-stone-200 bg-stone-50/70 text-stone-700 hover:border-stone-300 hover:bg-stone-100"
+                              ? "border-[#0f2a4f] bg-[#eef4fb] text-[#0f2a4f] ring-1 ring-[#0f2a4f]"
+                              : "border-[#dbe5f4] bg-[#f8fbff] text-[#172033] hover:border-[#b6cce8] hover:bg-white"
                           }`}
                         >
                           <span className="truncate">{u.displayName ?? u.username}</span>
-                          {isSelected && <Check size={13} className="text-[#1f4f8f] shrink-0 ml-1" />}
+                          {isSelected && <Check size={13} className="text-[#0f2a4f] shrink-0 ml-1" />}
                         </button>
                       );
                     })}
@@ -169,16 +171,16 @@ export function ComplaintDispatchModal({
               )}
 
               {users.length === 0 && (
-                <p className="mt-3 text-sm text-center text-stone-400">Belum ada manager atau director yang terdaftar.</p>
+                <p className="mt-3 text-sm text-center text-[#748299]">Belum ada manager atau director yang terdaftar.</p>
               )}
             </div>
 
             <div>
-              <label className="label text-stone-800 text-xs uppercase tracking-wider">
-                Catatan Disposisi <small className="font-normal text-stone-400">(opsional)</small>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#748299] mb-1">
+                Catatan Disposisi <small className="font-normal text-[#8b98ad]">(opsional)</small>
               </label>
               <textarea
-                className="field min-h-20 resize-y text-xs sm:text-sm"
+                className="w-full min-h-20 rounded-md border border-[#dbe5f4] bg-[#f8fbff] p-3 text-xs text-[#172033] outline-none placeholder:text-[#8b98ad] focus:border-[#0f2a4f] focus:bg-white"
                 placeholder="Misal: Mohon ditindaklanjuti dan dilaporkan kembali..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
@@ -186,20 +188,24 @@ export function ComplaintDispatchModal({
             </div>
 
             {selected && (
-              <div className="rounded-xl border border-amber-200/80 bg-amber-50/70 p-3 text-[11px] text-amber-800 leading-relaxed">
+              <div className="rounded-md border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-800 leading-relaxed">
                 Aduan ini akan dikirimkan ke <strong>{selected.displayName ?? selected.username}</strong>
                 {selected.bidang && ` (Bidang ${selected.bidang})`} sehingga dapat langsung ditindaklanjuti.
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-stone-100">
-              <button type="button" onClick={onClose} className="btn-secondary px-4 py-2 text-xs font-bold">
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#dbe5f4]">
+              <button
+                type="button"
+                onClick={onClose}
+                className="inline-flex h-9 items-center justify-center rounded-md border border-[#dbe5f4] bg-white px-4 text-xs font-semibold text-[#0f2a4f] hover:bg-[#eef4fb] transition"
+              >
                 Batal
               </button>
               <button
                 type="submit"
                 disabled={loading || !selectedId}
-                className="btn-primary px-5 py-2 text-xs font-bold shadow-md"
+                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-[#0f2a4f] px-5 text-xs font-semibold text-white transition hover:bg-[#173b6b] disabled:opacity-50"
               >
                 <SendHorizontal size={14} />
                 <span>{loading ? "Mengirim..." : "Kirim Disposisi"}</span>

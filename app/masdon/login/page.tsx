@@ -1,33 +1,42 @@
-import { Brand } from "@/components/layout/brand";
+import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { LoginForm } from "@/components/admin/login-form";
-import { Landmark } from "lucide-react";
 
 export default function AdminLoginPage() {
   return (
-    <main className="classic-backdrop relative grid min-h-screen place-items-center p-5 overflow-hidden">
-      {/* Decorative Classic Background Elements */}
-      <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 size-[650px] rounded-full bg-gradient-to-b from-[#1f4f8f]/8 via-[#f2d35f]/6 to-transparent blur-3xl" />
-      <div className="pointer-events-none absolute bottom-10 -right-20 size-80 rounded-full bg-[#1f4f8f]/5 blur-2xl" />
+    <main className="flex min-h-screen items-center justify-center bg-[#f5f8ff] px-6 py-10 text-[#172033]">
+      <section className="w-full max-w-md rounded-lg border border-[#d8e3f4] bg-white p-6 sm:p-8 shadow-xl shadow-[#0f2a4f]/10">
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#617089] hover:text-[#0f2a4f] transition"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          Kembali ke Portal Publik
+        </Link>
 
-      {/* Subtle watermark */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.03] select-none">
-        <Landmark className="size-[500px] text-[#1f4f8f]" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-md my-8">
-        <div className="mb-6 flex flex-col items-center justify-center">
-          <Brand />
-          <span className="mt-2 text-[11px] font-bold uppercase tracking-widest text-stone-400">
-            Portal Administrasi Internal
-          </span>
+        <div className="mb-6 flex items-start gap-4">
+          <Image
+            src="/logo-bopkri.png"
+            alt="Logo Yayasan BOPKRI Yogyakarta"
+            width={52}
+            height={52}
+            className="h-13 w-13 rounded-full object-contain shrink-0"
+          />
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-[#0f172a]">Masuk Panel Admin</h1>
+            <p className="mt-1 text-xs sm:text-sm leading-5 text-[#617089]">
+              Portal pengaduan Hallo BOPKRI Yayasan BOPKRI Yogyakarta.
+            </p>
+          </div>
         </div>
 
         <LoginForm />
 
-        <p className="mt-6 text-center text-xs text-stone-500">
-          Sistem Informasi & Pengaduan • Yayasan BOPKRI Yogyakarta
+        <p className="mt-6 text-center text-xs text-[#8b98ad]">
+          Sistem Informasi & Pengaduan • Yayasan BOPKRI
         </p>
-      </div>
+      </section>
     </main>
   );
 }

@@ -45,28 +45,43 @@ export function StatusUpdateForm({
   }
 
   return (
-    <form onSubmit={update} className="surface p-5">
-      <h2 className="text-lg font-extrabold">Perbarui status</h2>
-      <label className="mt-5 block">
-        <span className="label">Status baru</span>
-        <select className="field" value={statusId} onChange={(e) => setStatusId(e.target.value)}>
+    <form onSubmit={update} className="rounded-lg border border-[#dbe5f4] bg-white p-5 shadow-sm space-y-4">
+      <h2 className="text-base font-semibold text-[#0f172a]">Perbarui Status</h2>
+      <label className="block">
+        <span className="block text-xs font-semibold uppercase tracking-wider text-[#748299] mb-1.5">
+          Status baru
+        </span>
+        <select
+          className="h-10 w-full rounded-md border border-[#dbe5f4] bg-[#f8fbff] px-3 text-sm font-semibold text-[#172033] outline-none"
+          value={statusId}
+          onChange={(e) => setStatusId(e.target.value)}
+        >
           {statuses.filter((item) => item.isActive !== false).map((item) => (
             <option key={item.id} value={item.id}>{item.name}</option>
           ))}
         </select>
       </label>
-      <label className="mt-4 block">
-        <span className="label">Catatan untuk pelapor</span>
+      <label className="block">
+        <span className="block text-xs font-semibold uppercase tracking-wider text-[#748299] mb-1.5">
+          Catatan untuk pelapor
+        </span>
         <textarea
-          className="field min-h-24"
+          className="w-full min-h-24 rounded-md border border-[#dbe5f4] bg-[#f8fbff] p-3 text-xs text-[#172033] outline-none placeholder:text-[#8b98ad] focus:border-[#0f2a4f] focus:bg-white"
           value={note}
           onChange={(event) => setNote(event.target.value)}
           placeholder="Opsional, tampil pada halaman lacak..."
         />
       </label>
-      {error && <p className="error-box mt-4">{error}</p>}
-      <button className="btn-primary mt-4 w-full" disabled={loading}>
-        {loading ? "Menyimpan..." : "Simpan perubahan"}
+      {error && (
+        <div className="rounded-md border border-red-200 bg-red-50 p-2.5 text-xs text-red-700">
+          {error}
+        </div>
+      )}
+      <button
+        className="inline-flex h-10 w-full items-center justify-center rounded-md bg-[#0f2a4f] px-4 text-xs font-semibold text-white transition hover:bg-[#173b6b] disabled:opacity-50"
+        disabled={loading}
+      >
+        {loading ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
     </form>
   );
