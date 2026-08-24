@@ -7,6 +7,8 @@ import { useToast } from "@/components/ui/toast-provider";
 import type { Category } from "@/types/api";
 import { CategoryPicker } from "./category-picker";
 import { TicketSuccess } from "./ticket-success";
+import { Tag } from "./complaint-tag";
+import { ComplainNote } from "./complain-note";
 
 export function ComplaintForm() {
   const { show } = useToast();
@@ -51,6 +53,7 @@ export function ComplaintForm() {
         <label className="label">Kategori aduan *</label>
         <CategoryPicker value={category} onChange={setCategory} />
       </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <label>
           <span className="label">Nama pelapor <small className="font-normal">(opsional)</small></span>
@@ -61,6 +64,7 @@ export function ComplaintForm() {
           <input className="field" name="contact" placeholder="email atau nomor WhatsApp" />
         </label>
       </div>
+
       <label>
         <span className="label">Isi aduan *</span>
         <textarea
@@ -72,6 +76,14 @@ export function ComplaintForm() {
           placeholder="Ceritakan hal yang ingin Anda sampaikan secara jelas..."
         />
       </label>
+
+      <div>
+        <label className="label flex items-center justify-between">
+          <span>Tag / Bidang Terkait <small className="font-normal text-slate-500">(opsional)</small></span>
+        </label>
+        <Tag />
+      </div>
+
       <label className="block cursor-pointer rounded-2xl border border-dashed border-[#aebfbd] bg-[#f8faf9] p-5 transition hover:border-[#1f4f8f] hover:bg-[#f3f7fc]">
         <span className="flex items-center gap-2 font-bold"><Paperclip size={18} /> Lampirkan bukti</span>
         <span className="mt-1 block text-sm text-slate-500">
@@ -89,6 +101,8 @@ export function ComplaintForm() {
       <button disabled={loading} className="btn-primary w-full" type="submit">
         <Send size={18} /> {loading ? "Mengirim..." : "Kirim aduan"}
       </button>
+
+      <ComplainNote />
     </form>
   );
 }

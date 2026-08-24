@@ -21,8 +21,66 @@ h1, h2, h3, h4 { font-family: var(--font-heading), sans-serif; }
 button, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; transition: .2s ease; }
 
-.page-shell { min-height: 100vh; background:
-  radial-gradient(circle at 90% 4%, #dce8f8 0, transparent 24rem), var(--canvas); }
+.page-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 90% 4%, #dce8f8 0, transparent 24rem),
+    radial-gradient(circle at 10% 90%, #f0f4fc 0, transparent 20rem),
+    var(--canvas);
+}
+
+.classic-backdrop {
+  position: relative;
+  background-color: #f7f9fc;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(31, 79, 143, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 50% 120%, rgba(242, 211, 95, 0.08), transparent),
+    linear-gradient(to right, rgba(31, 79, 143, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 79, 143, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+}
+
+.classic-card {
+  border: 1px solid #d8e2ee;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 
+    0 4px 6px -1px rgba(31, 79, 143, 0.04),
+    0 20px 40px -8px rgba(31, 79, 143, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+}
+
+.classic-card-header {
+  border-bottom: 1px solid #edf2f7;
+  background: linear-gradient(180deg, #fcfdff 0%, #f8fafc 100%);
+  border-top-left-radius: 23px;
+  border-top-right-radius: 23px;
+}
+
+.classic-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #a0aec0;
+  margin: 1.5rem 0;
+}
+
+.classic-divider::before,
+.classic-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.classic-divider:not(:empty)::before {
+  margin-right: .75em;
+}
+
+.classic-divider:not(:empty)::after {
+  margin-left: .75em;
+}
+
 .container { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
 .hero-building {
   background-image: linear-gradient(90deg, rgba(12, 38, 77, .94) 0%,
@@ -31,9 +89,16 @@ button, a { -webkit-tap-highlight-color: transparent; transition: .2s ease; }
   background-position: center; background-size: cover;
 }
 .eyebrow {
-  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px;
   border-radius: 999px; background: #fff4bd; color: #715500;
+  border: 1px solid rgba(242, 211, 95, 0.5);
   font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+}
+.eyebrow-classic {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+  border-radius: 999px; background: #f0f5fc; color: #1f4f8f;
+  border: 1px solid #cbdbee;
+  font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
 }
 .surface {
   border: 1px solid #d9e3f2; border-radius: 24px; background: #fff;

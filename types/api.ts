@@ -28,6 +28,8 @@ export interface Complaint {
   id: string;
   ticketCode: string;
   category: Category;
+  tag?: string | null;
+  tags?: string[] | null;
   reporterName?: string | null;
   contact?: string | null;
   content: string;
@@ -53,6 +55,8 @@ export interface Dashboard {
 export interface TrackResult {
   ticketCode: string;
   category: Category;
+  tag?: string | null;
+  tags?: string[] | null;
   status: ComplaintStatus;
   createdAt: string;
   updatedAt: string;

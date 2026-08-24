@@ -1,18 +1,34 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, LoaderCircle, Paperclip } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, FileText, Landmark } from "lucide-react";
 import { api } from "@/lib/client-api";
-import { categoryLabel, formatDate } from "@/lib/constants";
-import type { ComplaintList as ListData, ComplaintStatus } from "@/types/api";
+import { BIDANG_TAGS, getTagStyle } from "@/lib/constants";
+import type { Complaint, ComplaintList as ListData, ComplaintStatus } from "@/types/api";
+import { useToast } from "@/components/ui/toast-provider";
 import { ComplaintFilters } from "./complaint-filters";
+import { ComplaintManagerTabs } from "./complaint-manager-tabs";
+import { ComplaintStatsCards } from "./complaint-stats-cards";
+import { ComplaintTable } from "./complaint-table";
+import { ComplaintDetailModal } from "./complaint-detail-modal";
+import { ComplaintDispatchModal } from "./complaint-dispatch-modal";
+
+function extractTags(item: Complaint): string[] {
+  if (Array.isArray(item.tags) && item.tags.length > 0) return item.tags;
+  const raw = (item as unknown as Record<string, unknown>).tags ?? (item as unknown as Record<string, unknown>).tag;
+  return typeof raw === "string" && raw.trim() ? raw.split(",").map((t) => t.trim()).filter(Boolean) : [];
+}
 
 export function ComplaintList() {
+  const { show } = useToast();
   const [data, setData] = useState<ListData | null>(null);
   const [statuses, setStatuses] = useState<ComplaintStatus[]>([]);
   const [query, setQuery] = useState(new URLSearchParams("page=1&limit=10"));
   const [error, setError] = useState("");
+  const [activeBidang, setActiveBidang] = useState<string>("all");
+  const [detailItem, setDetailItem] = useState<Complaint | null>(null);
+  const [dispatchItem, setDispatchItem] = useState<Complaint | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, string[]>>({});
 
   const load = useCallback(async () => {
     setData(null);
@@ -28,59 +44,96 @@ export function ComplaintList() {
     }
   }, [query]);
 
-  useEffect(() => {
-    // Muat ulang ketika filter atau nomor halaman berubah.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void load();
-  }, [load]);
+  useEffect(() => { void load(); }, [load]);
 
-  function page(value: number) {
+  const handleTabChange = (bidang: string) => {
+    setActiveBidang(bidang);
     const next = new URLSearchParams(query);
-    next.set("page", String(value));
+    if (bidang === "all") next.delete("tag"); else next.set("tag", bidang);
+    next.set("page", "1");
     setQuery(next);
-  }
+  };
+
+  const handlePage = (p: number) => {
+    const next = new URLSearchParams(query);
+    next.set("page", String(p));
+    setQuery(next);
+  };
+
+  const filtered = useMemo(() => {
+    if (!data?.data) return [];
+    return data.data.filter((item) => {
+      const tags = overrides[item.id] ?? extractTags(item);
+      return activeBidang === "all" || tags.some((t) => t.toLowerCase() === activeBidang.toLowerCase());
+    });
+  }, [data, activeBidang, overrides]);
+
+  const stats = useMemo(() => ({
+    total: filtered.length,
+    pending: filtered.filter((i) => !i.status.isFinal && !["SELESAI", "DITOLAK"].includes(i.status.code)).length,
+    completed: filtered.filter((i) => i.status.isFinal || ["SELESAI"].includes(i.status.code)).length,
+    hasAttachments: filtered.filter((i) => (i._count?.attachments ?? 0) > 0).length,
+  }), [filtered]);
+
+  const onDispatch = (id: string, bidang: string) => {
+    const target = BIDANG_TAGS.find((b) => b.value === bidang);
+    const currentTags = overrides[id] ?? extractTags(filtered.find((i) => i.id === id) || ({} as Complaint));
+    setOverrides((prev) => ({ ...prev, [id]: Array.from(new Set([...currentTags, bidang])) }));
+    show(`Aduan berhasil didisposisikan ke ${target?.managerTitle ?? bidang}.`);
+    setDispatchItem(null);
+  };
 
   return (
-    <div>
-      <div>
-        <p className="eyebrow">Kelola laporan</p>
-        <h1 className="mt-3 text-3xl font-extrabold">Daftar aduan</h1>
+    <div className="space-y-6">
+      <div className="relative overflow-hidden rounded-3xl border border-stone-200/90 bg-gradient-to-r from-[#173f78] via-[#1f4f8f] to-[#29328f] p-6 text-white shadow-xl shadow-[#1f4f8f]/10 sm:p-8">
+        <div className="pointer-events-none absolute -top-20 -right-16 size-72 rounded-full border-32 border-white/5" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-amber-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#f2d35f]">
+          <Landmark size={14} /> Portal Disposisi & Aduan Manajer Bidang
+        </div>
+        <h1 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight">Daftar Aduan Masuk</h1>
+        <p className="mt-2 text-sm text-blue-100/90">Kelola dan teruskan laporan masyarakat ke masing-masing bidang tugas.</p>
       </div>
+
+      <ComplaintManagerTabs activeBidang={activeBidang} onSelectBidang={handleTabChange} />
+      <ComplaintStatsCards activeBidang={activeBidang} stats={stats} />
       <ComplaintFilters statuses={statuses} query={query} setQuery={setQuery} />
-      {error && <p className="error-box mt-5">{error}</p>}
-      <section className="surface mt-5 overflow-x-auto">
-        {!data ? <LoaderCircle className="m-8 animate-spin text-[#1f4f8f]" /> : (
-          <>
-            <table className="w-full min-w-190 text-left text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50 text-xs text-slate-500">
-                <tr>{["Tiket", "Kategori", "Isi singkat", "Bukti", "Status", "Tanggal"].map((item) =>
-                  <th key={item} className="px-5 py-4 font-bold">{item}</th>)}</tr>
-              </thead>
-              <tbody>
-                {data.data.map((item) => (
-                  <tr key={item.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="px-5 py-4"><Link className="font-mono font-bold text-[#1f4f8f]" href={`/masdon/aduan/${item.id}`}>{item.ticketCode}</Link></td>
-                    <td className="px-5 py-4">{categoryLabel(item.category)}</td>
-                    <td className="max-w-80 truncate px-5 py-4 text-slate-500">{item.content}</td>
-                    <td className="px-5 py-4"><span className="flex gap-1"><Paperclip size={15} />{item._count?.attachments ?? 0}</span></td>
-                    <td className="px-5 py-4"><span className="rounded-full px-3 py-1 font-bold" style={{ color: item.status.color, background: `${item.status.color}18` }}>{item.status.name}</span></td>
-                    <td className="px-5 py-4 text-slate-500">{formatDate(item.createdAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {!data.data.length && <p className="empty">Belum ada aduan yang sesuai filter.</p>}
-            <footer className="flex items-center justify-between border-t border-slate-100 p-4">
-              <p className="text-sm text-slate-500">{data.meta.total} aduan</p>
-              <div className="flex items-center gap-2">
-                <button className="btn-secondary p-2" disabled={data.meta.page <= 1} onClick={() => page(data.meta.page - 1)}><ChevronLeft size={17} /></button>
-                <span className="text-sm font-bold">{data.meta.page} / {data.meta.totalPages || 1}</span>
-                <button className="btn-secondary p-2" disabled={data.meta.page >= data.meta.totalPages} onClick={() => page(data.meta.page + 1)}><ChevronRight size={17} /></button>
-              </div>
-            </footer>
-          </>
+      {error && <p className="error-box">{error}</p>}
+
+      <section className="surface border border-stone-200/90 shadow-md overflow-hidden">
+        <div className="border-b border-stone-200 bg-stone-50/80 px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <FileText size={18} className="text-[#1f4f8f]" />
+            <h2 className="font-bold text-stone-800 text-base">Aduan Masuk ({filtered.length})</h2>
+          </div>
+          {activeBidang !== "all" && (
+            <span className={`rounded-md border px-2.5 py-0.5 text-xs font-bold ${getTagStyle(activeBidang)}`}>
+              {BIDANG_TAGS.find((b) => b.value === activeBidang)?.label}
+            </span>
+          )}
+        </div>
+
+        <ComplaintTable
+          data={filtered}
+          loading={!data}
+          overrides={overrides}
+          onOpenDetail={(item) => setDetailItem(item)}
+          onOpenDispatch={(item) => setDispatchItem(item)}
+        />
+
+        {data && (
+          <footer className="flex items-center justify-between border-t border-stone-200 bg-stone-50/50 p-4">
+            <p className="text-xs text-stone-500">Menampilkan <strong>{filtered.length}</strong> dari <strong>{data.meta.total}</strong> total aduan</p>
+            <div className="flex items-center gap-2">
+              <button className="btn-secondary p-2" disabled={data.meta.page <= 1} onClick={() => handlePage(data.meta.page - 1)}><ChevronLeft size={16} /></button>
+              <span className="text-xs font-bold text-stone-700">{data.meta.page} / {data.meta.totalPages || 1}</span>
+              <button className="btn-secondary p-2" disabled={data.meta.page >= data.meta.totalPages} onClick={() => handlePage(data.meta.page + 1)}><ChevronRight size={16} /></button>
+            </div>
+          </footer>
         )}
       </section>
+
+      <ComplaintDetailModal item={detailItem} statuses={statuses} onClose={() => setDetailItem(null)} onOpenDispatch={(c) => setDispatchItem(c)} onStatusUpdated={load} />
+      <ComplaintDispatchModal item={dispatchItem} onClose={() => setDispatchItem(null)} onDispatch={onDispatch} />
     </div>
   );
 }
