@@ -1,12 +1,10 @@
-import type { Metadata } from "next";
-import { AdminShell } from "@/components/admin/admin-shell";
-import { DirectorComplaintList } from "@/components/admin/director-complaint-list";
+"use client";
 
-export const metadata: Metadata = { title: "Semua Aduan – Director" };
+import { AdminShell, DirectorComplaintList } from "@/components/admin";
 
 export default function DirectorAduanPage() {
   return (
-    <AdminShell role="DIRECTOR">
+    <AdminShell>
       <DirectorComplaintList />
     </AdminShell>
   );

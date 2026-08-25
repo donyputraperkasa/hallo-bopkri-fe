@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChartNoAxesColumn, ClipboardList, SlidersHorizontal, ArrowLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+type AdminRole = "owner" | "director" | "manager";
 
 const ownerMenus = [
   ["Dashboard", "/masdon/dashboard", ChartNoAxesColumn],
@@ -23,13 +23,13 @@ const managerMenus = [
 ] as const;
 
 function getMenus(role: AdminRole) {
-  if (role === "DIRECTOR") return directorMenus;
-  if (role === "MANAGER") return managerMenus;
+  if (role === "director") return directorMenus;
+  if (role === "manager") return managerMenus;
   return ownerMenus;
 }
 
 export function AdminNav({
-  role = "OWNER",
+  role = "owner",
   onItemClick,
 }: {
   role?: AdminRole;

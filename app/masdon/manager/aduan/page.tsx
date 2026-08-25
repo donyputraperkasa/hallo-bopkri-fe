@@ -1,12 +1,10 @@
-import type { Metadata } from "next";
-import { AdminShell } from "@/components/admin/admin-shell";
-import { ManagerComplaintList } from "@/components/admin/manager-complaint-list";
+"use client";
 
-export const metadata: Metadata = { title: "Aduan Bidang – Manajer" };
+import { AdminShell, ManagerComplaintList } from "@/components/admin";
 
 export default function ManagerAduanPage() {
   return (
-    <AdminShell role="MANAGER">
+    <AdminShell>
       <ManagerComplaintList />
     </AdminShell>
   );

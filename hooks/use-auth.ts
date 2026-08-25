@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+export type AdminRole = "owner" | "director" | "manager";
 
 export interface AuthUser {
   id: string;

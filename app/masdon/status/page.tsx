@@ -1,5 +1,4 @@
-import { AdminShell } from "@/components/admin/admin-shell";
-import { StatusManager } from "@/components/admin/status-manager";
+import { AdminShell, StatusManager } from "@/components/admin";
 
 export default function StatusPage() {
   return (

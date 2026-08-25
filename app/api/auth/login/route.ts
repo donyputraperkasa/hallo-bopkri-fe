@@ -14,25 +14,28 @@ export async function POST(request: Request) {
     const data = await response.json();
     if (!response.ok) return NextResponse.json(data, { status: response.status });
 
+    const userRole = (data.role?.toLowerCase() ?? "owner") as "owner" | "director" | "manager";
+
     const result = NextResponse.json({
       message: "Login berhasil.",
-      role: data.role,
+      role: userRole,
       bidang: data.bidang ?? null,
       displayName: data.displayName ?? null,
     });
 
+    // 60 menit masa berlaku token cookie
     const cookieOpts = {
       httpOnly: true,
       sameSite: "lax" as const,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 8,
+      maxAge: 60 * 60, // 60 menit
     };
 
     result.cookies.set(TOKEN_COOKIE, data.accessToken, cookieOpts);
-    result.cookies.set(ROLE_COOKIE, data.role ?? "OWNER", {
+    result.cookies.set(ROLE_COOKIE, userRole, {
       ...cookieOpts,
-      httpOnly: false, // Bisa dibaca JS untuk routing
+      httpOnly: false, // Bisa dibaca JS untuk routing & navigasi
     });
 
     return result;

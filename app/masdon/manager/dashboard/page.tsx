@@ -1,12 +1,10 @@
-import type { Metadata } from "next";
-import { AdminShell } from "@/components/admin/admin-shell";
-import { ManagerDashboardView } from "@/components/admin/manager-dashboard-view";
+"use client";
 
-export const metadata: Metadata = { title: "Dashboard – Manajer" };
+import { AdminShell, ManagerDashboardView } from "@/components/admin";
 
 export default function ManagerDashboardPage() {
   return (
-    <AdminShell role="MANAGER">
+    <AdminShell>
       <ManagerDashboardView />
     </AdminShell>
   );

@@ -1,13 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import { api } from "@/lib/client-api";
 import { getTagStyle, BIDANG_TAGS } from "@/lib/constants";
 import type { Complaint, ComplaintList as ListData, ComplaintStatus } from "@/types/api";
 import { ComplaintFilters } from "./complaint-filters";
+import { ComplaintManagerTabs } from "./complaint-manager-tabs";
 import { ComplaintTable } from "./complaint-table";
-import { ComplaintDetailModal } from "./complaint-detail-modal";
+import { ComplaintDetailModal } from "../detail/complaint-detail-modal";
+import { ComplaintPaginationFooter } from "./complaint-pagination-footer";
 
 function extractTags(item: Complaint): string[] {
   if (typeof item.tags === "string" && item.tags.trim()) {
@@ -47,6 +49,15 @@ export function DirectorComplaintList() {
     setQuery(next);
   };
 
+  const handleTabChange = (bidang: string) => {
+    setActiveBidang(bidang);
+    const next = new URLSearchParams(query);
+    if (bidang === "all") next.delete("tag");
+    else next.set("tag", bidang);
+    next.set("page", "1");
+    setQuery(next);
+  };
+
   const filtered = useMemo(() => {
     if (!data?.data) return [];
     if (activeBidang === "all") return data.data;
@@ -69,26 +80,7 @@ export function DirectorComplaintList() {
       </section>
 
       {/* Bidang Filter Tabs */}
-      <div className="rounded-lg border border-[#dbe5f4] bg-white p-2 shadow-sm overflow-x-auto">
-        <div className="flex min-w-max items-center gap-1.5 p-1">
-          {([
-            { value: "all", label: "Semua Bidang" },
-            ...BIDANG_TAGS,
-          ] as { value: string; label: string }[]).map((b) => (
-            <button
-              key={b.value}
-              onClick={() => setActiveBidang(b.value)}
-              className={`rounded-md px-4 py-2 text-xs sm:text-sm font-semibold transition ${
-                activeBidang === b.value
-                  ? "bg-[#0f2a4f] text-white shadow-xs"
-                  : "text-[#526078] hover:bg-[#f8fbff] hover:text-[#0f2a4f]"
-              }`}
-            >
-              {b.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <ComplaintManagerTabs activeBidang={activeBidang} onSelectBidang={handleTabChange} />
 
       <ComplaintFilters statuses={statuses} query={query} setQuery={setQuery} />
 
@@ -123,32 +115,13 @@ export function DirectorComplaintList() {
         />
 
         {data && (
-          <footer className="flex items-center justify-between border-t border-[#dbe5f4] bg-[#f8fbff] p-4 text-xs text-[#748299]">
-            <p>
-              Menampilkan <strong>{filtered.length}</strong> dari <strong>{data.meta.total}</strong> total aduan
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
-                disabled={data.meta.page <= 1}
-                onClick={() => handlePage(data.meta.page - 1)}
-                aria-label="Halaman sebelumnya"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <span className="font-semibold text-[#172033]">
-                {data.meta.page} / {data.meta.totalPages || 1}
-              </span>
-              <button
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
-                disabled={data.meta.page >= data.meta.totalPages}
-                onClick={() => handlePage(data.meta.page + 1)}
-                aria-label="Halaman berikutnya"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </footer>
+          <ComplaintPaginationFooter
+            filteredCount={filtered.length}
+            totalCount={data.meta.total}
+            currentPage={data.meta.page}
+            totalPages={data.meta.totalPages}
+            onPageChange={handlePage}
+          />
         )}
       </section>
 

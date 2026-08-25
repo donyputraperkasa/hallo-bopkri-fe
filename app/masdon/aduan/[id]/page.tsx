@@ -1,5 +1,4 @@
-import { AdminShell } from "@/components/admin/admin-shell";
-import { ComplaintDetail } from "@/components/admin/complaint-detail";
+import { AdminShell, ComplaintDetail } from "@/components/admin";
 
 export default async function ComplaintDetailPage({
   params,

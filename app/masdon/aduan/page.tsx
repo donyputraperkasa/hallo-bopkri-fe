@@ -1,5 +1,4 @@
-import { AdminShell } from "@/components/admin/admin-shell";
-import { ComplaintList } from "@/components/admin/complaint-list";
+import { AdminShell, ComplaintList } from "@/components/admin";
 
 export default function ComplaintsPage() {
   return (

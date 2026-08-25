@@ -1,27 +1,38 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { ArrowRight, Eye, EyeOff, LockKeyhole, User } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { ArrowRight, Eye, EyeOff, Info, LockKeyhole, User } from "lucide-react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
 
-type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+type AdminRole = "owner" | "director" | "manager";
 
 function dashboardFor(role: AdminRole): string {
-  if (role === "DIRECTOR") return "/masdon/director/dashboard";
-  if (role === "MANAGER") return "/masdon/manager/dashboard";
+  if (role === "director") return "/masdon/director/dashboard";
+  if (role === "manager") return "/masdon/manager/dashboard";
   return "/masdon/dashboard";
 }
 
 export function LoginForm() {
   const { show } = useToast();
   const [error, setError] = useState("");
+  const [inactivityNotice, setInactivityNotice] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("expired") === "1" || params.get("reason") === "inactivity") {
+        setInactivityNotice(true);
+      }
+    }
+  }, []);
 
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setInactivityNotice(false);
     setLoading(true);
     const values = new FormData(event.currentTarget);
     try {
@@ -35,6 +46,10 @@ export function LoginForm() {
           }),
         })
       );
+      // Reset timestamp aktivitas saat login berhasil
+      if (typeof window !== "undefined") {
+        localStorage.setItem("hallo_admin_last_activity", Date.now().toString());
+      }
       show(`Login berhasil. Selamat datang, ${data.displayName ?? "Admin"}!`);
       window.location.assign(dashboardFor(data.role));
     } catch (reason) {
@@ -47,6 +62,15 @@ export function LoginForm() {
 
   return (
     <form onSubmit={login} className="space-y-4">
+      {inactivityNotice && (
+        <div className="flex items-start gap-2.5 rounded-md border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-800 leading-relaxed">
+          <Info size={16} className="text-amber-700 shrink-0 mt-0.5" />
+          <span>
+            <strong>Sesi Berakhir:</strong> Anda telah otomatis keluar dari sistem karena tidak ada aktivitas selama lebih dari 60 menit. Silakan masuk kembali.
+          </span>
+        </div>
+      )}
+
       <label className="block">
         <span className="text-sm font-semibold text-[#2b3445]">Username</span>
         <span className="mt-2 flex h-12 items-center gap-3 rounded-md border border-[#ced9eb] bg-[#f8fbff] px-3 transition focus-within:border-[#0f2a4f] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0f2a4f]/15">

@@ -40,7 +40,7 @@ export async function GET() {
   return NextResponse.json({
     id: payload.sub,
     username: payload.username,
-    role: payload.role ?? "OWNER",
+    role: (payload.role?.toLowerCase() ?? "owner") as "owner" | "director" | "manager",
     bidang: payload.bidang ?? null,
     displayName: payload.displayName ?? payload.username,
   });

@@ -1,14 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import { api } from "@/lib/client-api";
 import { getTagStyle, BIDANG_TAGS } from "@/lib/constants";
 import { useAuth } from "@/hooks/use-auth";
 import type { Complaint, ComplaintList as ListData, ComplaintStatus } from "@/types/api";
 import { ComplaintFilters } from "./complaint-filters";
 import { ComplaintTable } from "./complaint-table";
-import { ComplaintDetailModal } from "./complaint-detail-modal";
+import { ComplaintDetailModal } from "../detail/complaint-detail-modal";
+import { ComplaintPaginationFooter } from "./complaint-pagination-footer";
 
 function extractTags(item: Complaint): string[] {
   if (typeof item.tags === "string" && item.tags.trim()) {
@@ -116,32 +117,13 @@ export function ManagerComplaintList() {
         />
 
         {data && (
-          <footer className="flex items-center justify-between border-t border-[#dbe5f4] bg-[#f8fbff] p-4 text-xs text-[#748299]">
-            <p>
-              Menampilkan <strong>{filtered.length}</strong> aduan bidang dari <strong>{data.meta.total}</strong> total diterima
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
-                disabled={data.meta.page <= 1}
-                onClick={() => handlePage(data.meta.page - 1)}
-                aria-label="Halaman sebelumnya"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <span className="font-semibold text-[#172033]">
-                {data.meta.page} / {data.meta.totalPages || 1}
-              </span>
-              <button
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#dbe5f4] bg-white text-[#0f2a4f] hover:bg-[#f8fbff] disabled:opacity-40 disabled:cursor-not-allowed"
-                disabled={data.meta.page >= data.meta.totalPages}
-                onClick={() => handlePage(data.meta.page + 1)}
-                aria-label="Halaman berikutnya"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </footer>
+          <ComplaintPaginationFooter
+            filteredCount={filtered.length}
+            totalCount={data.meta.total}
+            currentPage={data.meta.page}
+            totalPages={data.meta.totalPages}
+            onPageChange={handlePage}
+          />
         )}
       </section>
 

@@ -4,7 +4,7 @@ export const TOKEN_COOKIE = "hallo_admin_token";
 export const ROLE_COOKIE = "hallo_admin_role";
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:4000/api";
 
-export type AdminRole = "OWNER" | "DIRECTOR" | "MANAGER";
+export type AdminRole = "owner" | "director" | "manager";
 
 export interface AdminInfo {
   role: AdminRole;

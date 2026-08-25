@@ -133,7 +133,7 @@ export function ManagerDashboardView() {
         <div className="mt-5 space-y-3">
           {data.data.length === 0 ? (
             <p className="py-8 text-center text-sm font-semibold text-[#748299]">
-              Belum ada aduan yang didisposisikan ke bidang Anda.
+              Belum ada aduan yang dikirim ke bidang Anda.
             </p>
           ) : (
             data.data.slice(0, 5).map((item) => (

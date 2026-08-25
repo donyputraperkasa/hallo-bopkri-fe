@@ -125,17 +125,19 @@ export function ComplaintTable({
                       <button
                         type="button"
                         onClick={() => onOpenDispatch(item)}
-                        className="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-100 transition"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-100 transition"
                       >
-                        <SendHorizontal size={13} className="text-amber-700" /> Disposisi
+                        <SendHorizontal size={13} className="text-amber-700" />
+                        <span>Kirim ke</span>
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => onOpenDetail(item)}
-                      className="inline-flex items-center gap-1 rounded-md border border-[#cfe0f5] bg-[#eaf2ff] px-3 py-1.5 text-xs font-semibold text-[#0f2a4f] hover:bg-[#dbeafe] transition"
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[#cfe0f5] bg-[#eaf2ff] px-3 py-1.5 text-xs font-semibold text-[#0f2a4f] hover:bg-[#dbeafe] transition"
                     >
-                      <Eye size={13} /> Detail
+                      <Eye size={13} />
+                      <span>Detail</span>
                     </button>
                   </div>
                 </td>
