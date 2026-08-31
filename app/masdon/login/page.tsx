@@ -25,7 +25,7 @@ export default function LoginPage() {
               className="h-16 w-16 rounded-full bg-[#f8fbff] p-1 border border-[#dbe5f4] object-contain shadow-xs"
             />
             <div>
-              <h1 className="text-xl font-bold text-[#0f172a]">Portal MasDon BOPKRI</h1>
+              <h1 className="text-xl font-bold text-[#0f172a]">Portal Login</h1>
               <p className="mt-1 text-xs text-[#748299]">
                 Silakan masuk dengan akun pengurus atau bidang Anda.
               </p>

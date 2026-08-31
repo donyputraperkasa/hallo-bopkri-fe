@@ -48,7 +48,7 @@ export function TrackingForm({ initialTicket = "" }: { initialTicket?: string })
         <div className="flex flex-col gap-3 sm:flex-row">
           <input
             id="ticket"
-            className="field flex-1 font-mono uppercase tracking-wider text-base placeholder:text-stone-400 placeholder:normal-case placeholder:tracking-normal"
+            className="field flex-1 font-mono uppercase tracking-wider text-base placeholder:text-stone-400 placeholder:normal-case placeholder:tracking-normal text-stone-900"
             value={ticket}
             onChange={(event) => setTicket(event.target.value)}
             placeholder="Contoh: HB-20260723-ABC123"

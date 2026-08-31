@@ -1,10 +1,42 @@
-import { categoryLabel, formatDate } from "@/lib/constants";
+"use client";
+
+import { useEffect, useState } from "react";
+import { categoryLabel, formatDate, BIDANG_TAGS, getTagStyle } from "@/lib/constants";
 import type { TrackResult } from "@/types/api";
-import { CheckCircle2, Clock, FileText } from "lucide-react";
+import { Clock, FileText, MessageSquareQuote, Paperclip, User } from "lucide-react";
 
 export function TrackingResult({ data }: { data: TrackResult }) {
+  const [localDetails, setLocalDetails] = useState<{
+    content?: string;
+    reporterName?: string;
+    contact?: string;
+    tags?: string[];
+  } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem(`hallo_complaint_${data.ticketCode}`);
+        if (raw) setLocalDetails(JSON.parse(raw));
+      } catch {
+        // Ignore JSON parse errors
+      }
+    }
+  }, [data.ticketCode]);
+
+  const rawTags = data.tags ?? data.tag ?? localDetails?.tags;
+  const tags = Array.isArray(rawTags)
+    ? rawTags
+    : typeof rawTags === "string" && rawTags.trim()
+    ? rawTags.split(",").map((t) => t.trim()).filter(Boolean)
+    : [];
+
+  const displayContent = data.content || localDetails?.content;
+  const displayReporter = data.reporterName || localDetails?.reporterName;
+
   return (
-    <article className="surface mt-8 overflow-hidden border border-stone-200/90 shadow-xl">
+    <article className="surface mt-8 overflow-hidden border border-stone-200/90 shadow-xl bg-white">
+      {/* Header Tiket Resmi */}
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-stone-100 bg-gradient-to-r from-stone-50 via-white to-stone-50 p-6">
         <div className="flex items-start gap-3">
           <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#1f4f8f]/10 text-[#1f4f8f]">
@@ -32,44 +64,102 @@ export function TrackingResult({ data }: { data: TrackResult }) {
         </span>
       </header>
 
-      <div className="p-6 sm:p-8 bg-white">
-        <div className="flex items-center gap-2 mb-6">
-          <Clock size={18} className="text-[#1f4f8f]" />
-          <h3 className="text-base font-extrabold text-stone-900">Riwayat Penanganan Aduan</h3>
-        </div>
+      <div className="p-6 sm:p-8 space-y-7">
+        {/* Tampilan Isian Aduan / Laporan yang Diajukan */}
+        {displayContent ? (
+          <div className="rounded-2xl border border-stone-200 bg-[#fbfcfd] p-5 sm:p-6 space-y-3.5 shadow-2xs">
+            <div className="flex items-center justify-between gap-2 border-b border-stone-200/70 pb-3">
+              <div className="flex items-center gap-2">
+                <MessageSquareQuote size={18} className="text-[#1f4f8f]" />
+                <h3 className="text-sm font-extrabold text-stone-900 uppercase tracking-wider">
+                  Isi Laporan / Aduan
+                </h3>
+              </div>
 
-        <ol className="mt-4 space-y-0">
-          {data.histories.map((item, index) => (
-            <li
-              key={`${item.id ?? item.status.code}-${item.createdAt}-${index}`}
-              className="relative flex gap-4 pb-8 last:pb-0"
-            >
-              {index < data.histories.length - 1 && (
-                <span className="absolute top-6 left-[11px] h-full w-0.5 bg-stone-200" />
+              {displayReporter && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-stone-600 bg-white px-2.5 py-1 rounded-lg border border-stone-200">
+                  <User size={13} className="text-stone-400" />
+                  <span>{displayReporter}</span>
+                </span>
               )}
-              <span
-                className="relative mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-white shadow-xs"
-                style={{
-                  border: `2px solid ${item.status.color}`,
-                }}
-              >
-                <span className="size-2 rounded-full" style={{ backgroundColor: item.status.color }} />
-              </span>
-              <div className="flex-1">
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <p className="font-bold text-stone-800">{item.status.name}</p>
-                  <p className="text-xs text-stone-400">{formatDate(item.createdAt)}</p>
-                </div>
-                {item.publicNote && (
-                  <div className="mt-2.5 rounded-xl border border-stone-200/70 bg-stone-50/80 p-3.5 text-sm text-stone-700 leading-relaxed">
-                    <p className="text-xs font-semibold text-stone-500 mb-1">Catatan Tim Penindaklanjut:</p>
-                    {item.publicNote}
+            </div>
+
+            {/* Konten Aduan */}
+            <div className="text-sm text-stone-800 leading-relaxed whitespace-pre-wrap">
+              {displayContent}
+            </div>
+
+            {/* Bidang Terkait & Lampiran jika ada */}
+            {(tags.length > 0 || (data.attachments && data.attachments.length > 0)) && (
+              <div className="pt-2 border-t border-stone-200/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+                {tags.length > 0 && (
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-stone-500 font-medium">Bidang:</span>
+                    {tags.map((t) => {
+                      const tagInfo = BIDANG_TAGS.find((b) => b.value.toLowerCase() === t.toLowerCase());
+                      return (
+                        <span
+                          key={t}
+                          className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold ${getTagStyle(t)}`}
+                        >
+                          {tagInfo?.label ?? t}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {data.attachments && data.attachments.length > 0 && (
+                  <div className="flex items-center gap-1.5 text-stone-500 font-medium">
+                    <Paperclip size={13} className="text-[#1f4f8f]" />
+                    <span>{data.attachments.length} Berkas Lampiran</span>
                   </div>
                 )}
               </div>
-            </li>
-          ))}
-        </ol>
+            )}
+          </div>
+        ) : null}
+
+        {/* Riwayat Penanganan Aduan */}
+        <div>
+          <div className="flex items-center gap-2 mb-6">
+            <Clock size={18} className="text-[#1f4f8f]" />
+            <h3 className="text-base font-extrabold text-stone-900">Riwayat Penanganan Aduan</h3>
+          </div>
+
+          <ol className="mt-4 space-y-0">
+            {data.histories.map((item, index) => (
+              <li
+                key={`${item.id ?? item.status.code}-${item.createdAt}-${index}`}
+                className="relative flex gap-4 pb-8 last:pb-0"
+              >
+                {index < data.histories.length - 1 && (
+                  <span className="absolute top-6 left-[11px] h-full w-0.5 bg-stone-200" />
+                )}
+                <span
+                  className="relative mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-white shadow-xs"
+                  style={{
+                    border: `2px solid ${item.status.color}`,
+                  }}
+                >
+                  <span className="size-2 rounded-full" style={{ backgroundColor: item.status.color }} />
+                </span>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <p className="font-bold text-stone-800">{item.status.name}</p>
+                    <p className="text-xs text-stone-400">{formatDate(item.createdAt)}</p>
+                  </div>
+                  {item.publicNote && (
+                    <div className="mt-2.5 rounded-xl border border-stone-200/70 bg-stone-50/80 p-3.5 text-sm text-stone-700 leading-relaxed">
+                      <p className="text-xs font-semibold text-stone-500 mb-1">Catatan Tim Penindaklanjut:</p>
+                      {item.publicNote}
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </article>
   );

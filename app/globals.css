@@ -192,6 +192,10 @@ button, a {
   width: 100%; border: 1px solid #dbe5f4; border-radius: 8px; background: #fff;
   padding: 10px 14px; outline: none; transition: .2s; color: #172033;
 }
+.field::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
 .field:focus { border-color: #0f2a4f; box-shadow: 0 0 0 3px #dce8f8; }
 .label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #334155; }
 .btn-primary {

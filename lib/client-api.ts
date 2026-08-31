@@ -6,8 +6,8 @@ export async function readResponse<T>(response: Response): Promise<T> {
     : await response.text();
 
   if (!response.ok) {
-    if (response.status === 401 && location.pathname.startsWith("/masdon")) {
-      location.assign("/masdon/login");
+    if (response.status === 401 && typeof window !== "undefined" && window.location.pathname.startsWith("/masdon")) {
+      window.location.assign("/masdon/login");
     }
     const message =
       typeof body === "object" && body
@@ -21,7 +21,11 @@ export async function readResponse<T>(response: Response): Promise<T> {
 }
 
 export async function api<T>(url: string, options?: RequestInit) {
+  const headers = new Headers(options?.headers);
+  if (options?.body && typeof options.body === "string" && !headers.has("content-type")) {
+    headers.set("content-type", "application/json");
+  }
   return readResponse<T>(
-    await fetch(url, { cache: "no-store", ...options }),
+    await fetch(url, { cache: "no-store", ...options, headers }),
   );
 }

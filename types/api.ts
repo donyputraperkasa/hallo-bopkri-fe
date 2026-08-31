@@ -56,9 +56,13 @@ export interface TrackResult {
   ticketCode: string;
   category: Category;
   tag?: string | null;
-  tags?: string[] | null;
+  tags?: string[] | string | null;
+  reporterName?: string | null;
+  contact?: string | null;
+  content?: string | null;
   status: ComplaintStatus;
   createdAt: string;
   updatedAt: string;
   histories: ComplaintHistory[];
+  attachments?: Attachment[];
 }
