@@ -9,6 +9,13 @@
   --canvas: #eef4fb;
   --ink: #172033;
   --muted: #617089;
+
+  /* Pedoman Warna Hijau Resmi (Success / Copy Feedback) */
+  --green-primary: #059669;    /* emerald-600 */
+  --green-hover: #047857;      /* emerald-700 */
+  --green-text: #047857;       /* emerald-700 */
+  --green-border: #a7f3d0;     /* emerald-200 */
+  --green-surface: #ecfdf5;    /* emerald-50 */
 }
 
 @theme inline {

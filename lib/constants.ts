@@ -13,6 +13,18 @@ import {
 } from "lucide-react";
 import type { Category } from "@/types/api";
 
+/**
+ * Pedoman Resmi Palet Warna Hijau (Success / Verified / Tersalin)
+ * Disukai untuk indikator sukses, tombol tersalin, dan status terverifikasi.
+ */
+export const GREEN_PALETTE = {
+  primary: "#059669", // Tailwind: emerald-600 (Tombol Sukses / Centang)
+  hover: "#047857", // Tailwind: emerald-700 (Hover State Tombol)
+  text: "#047857", // Tailwind: emerald-700 (Teks Informasi / Feedback)
+  border: "#a7f3d0", // Tailwind: emerald-200 (Garis Tepi Kotak / Card)
+  background: "#ecfdf5", // Tailwind: emerald-50 (Latar Belakang Halus / Container)
+} as const;
+
 export const CATEGORIES = [
   {
     value: "QUESTION",

@@ -42,7 +42,7 @@ export function TrackingForm({ initialTicket = "" }: { initialTicket?: string })
     }
   }
 
-  const handleRemoveRecent = (code: string, e: React.MouseEvent) => {
+  const handleRemoveRecent = (code: string) => {
     const updated = removeStoredTicket(code);
     setRecentTickets(updated);
   };
@@ -53,12 +53,12 @@ export function TrackingForm({ initialTicket = "" }: { initialTicket?: string })
         <div className="flex items-center gap-2 mb-4">
           <Ticket size={20} className="text-[#1f4f8f]" />
           <label className="label mb-0 text-stone-800 text-base" htmlFor="ticket">
-            Kode Tiket Aduan
+            Kode Tiket Aduan / Aspirasi
           </label>
         </div>
 
-        <p className="text-xs text-stone-500 mb-4">
-          Format kode: <code className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-700">HB-YYYYMMDD-XXXXXX</code>
+        <p className="text-xs text-stone-500 mb-2">
+          Format awalan: <code className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-700 font-bold">CMP-</code> (Keluhan), <code className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-700 font-bold">APP-</code> (Apresiasi), atau <code className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-700 font-bold">QUE-</code> (Pertanyaan).
         </p>
 
         <p className="text-xs text-stone-500 mb-4">
@@ -71,7 +71,7 @@ export function TrackingForm({ initialTicket = "" }: { initialTicket?: string })
             className="field flex-1 font-mono uppercase tracking-wider text-base placeholder:text-stone-400 placeholder:normal-case placeholder:tracking-normal text-stone-900"
             value={ticket}
             onChange={(event) => setTicket(event.target.value)}
-            placeholder="Contoh: HB-20260723-ABC123"
+            placeholder="Contoh: CMP-20260831-ABC123"
             required
           />
           <button className="btn-primary shadow-md shrink-0 px-6 cursor-pointer" disabled={loading}>
