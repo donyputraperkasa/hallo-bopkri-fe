@@ -8,12 +8,14 @@ interface DetailAttachmentsListProps {
   attachments?: Attachment[];
   attachmentCount?: number;
   onPreview: (att: Attachment) => void;
+  allowDownload?: boolean;
 }
 
 export function DetailAttachmentsList({
   attachments,
   attachmentCount = 0,
   onPreview,
+  allowDownload = false,
 }: DetailAttachmentsListProps) {
   const count = attachments?.length ?? attachmentCount;
 
@@ -50,14 +52,16 @@ export function DetailAttachmentsList({
                 >
                   <Eye size={12} /> Lihat
                 </button>
-                <a
-                  href={`/api/admin/complaints/attachments/${file.id}`}
-                  download={file.originalName}
-                  className="rounded-md p-1 text-[#748299] hover:text-[#0f2a4f]"
-                  title="Download berkas"
-                >
-                  <Download size={15} />
-                </a>
+                {allowDownload && (
+                  <a
+                    href={`/api/admin/complaints/attachments/${file.id}?download=1`}
+                    download={file.originalName}
+                    className="rounded-md p-1 text-[#748299] hover:text-[#0f2a4f]"
+                    title="Download berkas"
+                  >
+                    <Download size={15} />
+                  </a>
+                )}
               </div>
             </div>
           ))

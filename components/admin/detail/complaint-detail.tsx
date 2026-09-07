@@ -6,6 +6,7 @@ import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { api } from "@/lib/client-api";
 import type { Attachment, Complaint, ComplaintStatus } from "@/types/api";
 import { useToast } from "@/components/ui/toast-provider";
+import { useAuth } from "@/hooks/use-auth";
 import { StatusUpdateForm } from "../status/status-update-form";
 import { ComplaintDispatchModal } from "../dispatch/complaint-dispatch-modal";
 import { ComplaintMainCard } from "./complaint-main-card";
@@ -26,6 +27,8 @@ function getComplaintTags(item: Complaint): string[] {
 }
 
 export function ComplaintDetail({ id }: { id: string }) {
+  const { user } = useAuth();
+  const isOwner = user?.role === "owner";
   const { show } = useToast();
   const [item, setItem] = useState<Complaint | null>(null);
   const [statuses, setStatuses] = useState<ComplaintStatus[]>([]);
@@ -118,7 +121,7 @@ export function ComplaintDetail({ id }: { id: string }) {
         <ArrowLeft size={16} /> Kembali ke Daftar Aduan
       </Link>
 
-      <div className="grid gap-5 xl:grid-cols-[1fr_340px]">
+      <div className={`grid gap-5 ${isOwner ? "xl:grid-cols-[1fr_340px]" : ""}`}>
         <div className="space-y-5">
           <ComplaintMainCard
             item={item}
@@ -131,6 +134,7 @@ export function ComplaintDetail({ id }: { id: string }) {
               attachments={item.attachments}
               attachmentCount={item._count?.attachments}
               onPreview={(file) => setPreviewAttachment(file)}
+              allowDownload={isOwner}
             />
           </article>
 
@@ -140,22 +144,24 @@ export function ComplaintDetail({ id }: { id: string }) {
           </article>
         </div>
 
-        <aside className="space-y-5">
-          <ComplaintBidangCard
-            selectedBidangs={selectedBidangs}
-            isDispatching={isDispatching}
-            onToggleBidang={toggleBidang}
-            onSubmit={handleQuickDispatch}
-            onOpenModal={() => setDispatchModalOpen(true)}
-          />
+        {isOwner && (
+          <aside className="space-y-5">
+            <ComplaintBidangCard
+              selectedBidangs={selectedBidangs}
+              isDispatching={isDispatching}
+              onToggleBidang={toggleBidang}
+              onSubmit={handleQuickDispatch}
+              onOpenModal={() => setDispatchModalOpen(true)}
+            />
 
-          <StatusUpdateForm
-            complaintId={item.id}
-            currentId={item.status.id}
-            statuses={statuses}
-            onUpdated={load}
-          />
-        </aside>
+            <StatusUpdateForm
+              complaintId={item.id}
+              currentId={item.status.id}
+              statuses={statuses}
+              onUpdated={load}
+            />
+          </aside>
+        )}
       </div>
 
       <ComplaintDispatchModal
@@ -170,6 +176,7 @@ export function ComplaintDetail({ id }: { id: string }) {
       <ComplaintAttachmentPreview
         attachment={previewAttachment}
         onClose={() => setPreviewAttachment(null)}
+        allowDownload={isOwner}
       />
     </div>
   );

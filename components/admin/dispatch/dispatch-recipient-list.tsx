@@ -50,47 +50,12 @@ export function DispatchRecipientList({
         </div>
       </div>
 
-      {directors.length > 0 && (
-        <div className="mt-2">
-          <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#748299] mb-1.5">
-            <Briefcase size={11} /> Direktur
-          </p>
-          <div className="space-y-1.5">
-            {directors.map((u) => {
-              const isSelected = selectedIds.includes(u.id);
-              return (
-                <button
-                  key={u.id}
-                  type="button"
-                  onClick={() => onToggle(u.id)}
-                  className={`flex w-full items-center justify-between rounded-lg border p-2.5 text-left text-xs font-semibold transition ${
-                    isSelected
-                      ? "border-[#0f2a4f] bg-[#eef4fb] text-[#0f2a4f] ring-1 ring-[#0f2a4f]"
-                      : "border-[#dbe5f4] bg-[#f8fbff] text-[#172033] hover:border-[#b6cce8] hover:bg-white"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span
-                      className={`grid size-4 place-items-center rounded border transition ${
-                        isSelected
-                          ? "border-[#0f2a4f] bg-[#0f2a4f] text-white"
-                          : "border-stone-300 bg-white"
-                      }`}
-                    >
-                      {isSelected && <Check size={12} strokeWidth={3} />}
-                    </span>
-                    <Briefcase
-                      size={14}
-                      className={isSelected ? "text-[#0f2a4f]" : "text-[#748299]"}
-                    />
-                    <span>{u.displayName ?? u.username}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+      <div className="my-2.5 rounded-lg border border-[#cfe0f5] bg-[#f0f6ff] p-3 text-xs text-[#526078] flex items-start gap-2.5">
+        <Briefcase size={16} className="text-[#0f2a4f] shrink-0 mt-0.5" />
+        <div className="leading-relaxed">
+          <span className="font-semibold text-[#0f2a4f]">Akses Pengawasan Direktur:</span> Direktur Yayasan otomatis dapat memantau seluruh laporan masuk secara langsung tanpa perlu disposisi. Pilih manajer bidang di bawah untuk penugasan tindak lanjut.
         </div>
-      )}
+      </div>
 
       {managers.length > 0 && (
         <div className="mt-3">
@@ -154,9 +119,9 @@ export function DispatchRecipientList({
         </div>
       )}
 
-      {totalUsers === 0 && (
+      {managers.length === 0 && (
         <p className="mt-3 text-sm text-center text-[#748299]">
-          Belum ada manajer atau direktur yang terdaftar.
+          Belum ada manajer bidang yang terdaftar.
         </p>
       )}
     </div>

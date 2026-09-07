@@ -2,6 +2,7 @@
 
 import { FileSpreadsheet, FileText, RotateCcw, Search } from "lucide-react";
 import type { ComplaintStatus } from "@/types/api";
+import { useAuth } from "@/hooks/use-auth";
 import { CATEGORIES } from "@/lib/constants";
 
 export function ComplaintFilters({
@@ -13,6 +14,8 @@ export function ComplaintFilters({
   query: URLSearchParams;
   setQuery: (query: URLSearchParams) => void;
 }) {
+  const { user } = useAuth();
+  const isOwner = user?.role === "owner";
   function change(name: string, value: string) {
     const next = new URLSearchParams(query);
     if (value) next.set(name, value);
@@ -91,27 +94,29 @@ export function ComplaintFilters({
             </button>
           )}
 
-          {/* Export Group */}
-          <div className="flex items-center gap-1.5 border-l border-[#dbe5f4] pl-2.5">
-            <a
-              className="inline-flex h-10 items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50/70 px-3 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition"
-              href={`/api/admin/complaints/export.xlsx?${query}`}
-              download
-              title="Ekspor data ke format Excel (.xlsx)"
-            >
-              <FileSpreadsheet size={15} className="text-emerald-700" />
-              <span>Excel</span>
-            </a>
-            <a
-              className="inline-flex h-10 items-center gap-1.5 rounded-md border border-rose-200 bg-rose-50/70 px-3 text-xs font-semibold text-rose-800 hover:bg-rose-100 transition"
-              href={`/api/admin/complaints/export.pdf?${query}`}
-              download
-              title="Ekspor laporan ke format PDF"
-            >
-              <FileText size={15} className="text-rose-700" />
-              <span>PDF</span>
-            </a>
-          </div>
+          {/* Export Group (Khusus Owner) */}
+          {isOwner && (
+            <div className="flex items-center gap-1.5 border-l border-[#dbe5f4] pl-2.5">
+              <a
+                className="inline-flex h-10 items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50/70 px-3 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition"
+                href={`/api/admin/complaints/export.xlsx?${query}`}
+                download
+                title="Ekspor data ke format Excel (.xlsx)"
+              >
+                <FileSpreadsheet size={15} className="text-emerald-700" />
+                <span>Excel</span>
+              </a>
+              <a
+                className="inline-flex h-10 items-center gap-1.5 rounded-md border border-rose-200 bg-rose-50/70 px-3 text-xs font-semibold text-rose-800 hover:bg-rose-100 transition"
+                href={`/api/admin/complaints/export.pdf?${query}`}
+                download
+                title="Ekspor laporan ke format PDF"
+              >
+                <FileText size={15} className="text-rose-700" />
+                <span>PDF</span>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </section>

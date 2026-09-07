@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 import { LoaderCircle } from "lucide-react";
 import { api } from "@/lib/client-api";
 import type { Attachment, Complaint, ComplaintStatus } from "@/types/api";
@@ -27,6 +28,8 @@ export function ComplaintDetailModal({
   onStatusUpdated: () => void;
   readOnly?: boolean;
 }) {
+  const { user } = useAuth();
+  const isOwner = user?.role === "owner";
   const [fullItem, setFullItem] = useState<Complaint | null>(item);
   const [loading, setLoading] = useState<boolean>(false);
   const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null);
@@ -94,11 +97,12 @@ export function ComplaintDetailModal({
               attachments={current.attachments}
               attachmentCount={current._count?.attachments}
               onPreview={(file) => setPreviewAttachment(file)}
+              allowDownload={isOwner}
             />
 
             <DetailHistoriesList histories={current.histories} />
 
-            {!readOnly && (
+            {!readOnly && isOwner && (
               <DetailQuickStatusForm
                 complaintId={current.id}
                 currentStatusId={current.status.id}
@@ -126,6 +130,7 @@ export function ComplaintDetailModal({
       <ComplaintAttachmentPreview
         attachment={previewAttachment}
         onClose={() => setPreviewAttachment(null)}
+        allowDownload={isOwner}
       />
     </>
   );

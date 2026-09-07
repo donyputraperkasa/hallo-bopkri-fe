@@ -7,6 +7,7 @@ import { getTagStyle, BIDANG_TAGS } from "@/lib/constants";
 import type { Complaint, ComplaintList as ListData, ComplaintStatus } from "@/types/api";
 import { ComplaintFilters } from "./complaint-filters";
 import { ComplaintManagerTabs } from "./complaint-manager-tabs";
+import { ComplaintStatsCards } from "../dashboard/complaint-stats-cards";
 import { ComplaintTable } from "./complaint-table";
 import { ComplaintDetailModal } from "../detail/complaint-detail-modal";
 import { ComplaintPaginationFooter } from "./complaint-pagination-footer";
@@ -67,20 +68,40 @@ export function DirectorComplaintList() {
     });
   }, [data, activeBidang]);
 
+  const stats = useMemo(
+    () => ({
+      total: filtered.length,
+      pending: filtered.filter(
+        (i) => !i.status.isFinal && !["SELESAI", "DITOLAK"].includes(i.status.code)
+      ).length,
+      completed: filtered.filter(
+        (i) => i.status.isFinal || ["SELESAI"].includes(i.status.code)
+      ).length,
+      hasAttachments: filtered.filter((i) => (i._count?.attachments ?? 0) > 0).length,
+    }),
+    [filtered]
+  );
+
   return (
     <div className="space-y-5">
       {/* Header Banner */}
       <section className="rounded-lg border border-[#dbe5f4] bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-semibold text-[#0f172a]">Daftar Seluruh Aduan</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[#0f172a]">Daftar Seluruh Aduan Masuk</h2>
+            <span className="rounded-full bg-[#eaf2ff] border border-[#cfe0f5] px-2.5 py-0.5 text-xs font-semibold text-[#0f2a4f]">
+              Akses Langsung Direktur
+            </span>
+          </div>
           <p className="text-sm text-[#748299]">
-            Pantau seluruh laporan masyarakat dari berbagai bidang dan unit sekolah secara terpadu.
+            Pantau seluruh laporan masyarakat secara terpadu tanpa perlu menunggu disposisi bidang.
           </p>
         </div>
       </section>
 
       {/* Bidang Filter Tabs */}
       <ComplaintManagerTabs activeBidang={activeBidang} onSelectBidang={handleTabChange} />
+      <ComplaintStatsCards activeBidang={activeBidang} stats={stats} />
 
       <ComplaintFilters statuses={statuses} query={query} setQuery={setQuery} />
 
