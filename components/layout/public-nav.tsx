@@ -22,7 +22,7 @@ export function PublicNav() {
             key={href}
             href={href}
             aria-label={label}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs sm:text-sm font-semibold transition ${
+            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs sm:text-sm font-semibold transition-all duration-200 active:scale-95 ${
               active
                 ? "bg-[#1f4f8f] text-white shadow-xs"
                 : "text-[#526078] hover:bg-[#eef3fb] hover:text-[#1f4f8f]"

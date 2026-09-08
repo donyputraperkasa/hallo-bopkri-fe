@@ -39,7 +39,7 @@ export default async function TrackComplaintPage({
         />
 
         <section className="container relative z-10">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
+          <div className="mx-auto mb-10 max-w-2xl text-center animate-fade-up">
             <span className="inline-flex items-center rounded-md bg-[#f2d35f] px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-[#2d2a16] shadow-xs">
               Pelacakan Status & Tindak Lanjut
             </span>
@@ -53,7 +53,7 @@ export default async function TrackComplaintPage({
             </p>
           </div>
 
-          <div className="mx-auto max-w-3xl">
+          <div className="mx-auto max-w-3xl animate-fade-up-delay">
             <TrackingForm initialTicket={ticket} />
           </div>
         </section>

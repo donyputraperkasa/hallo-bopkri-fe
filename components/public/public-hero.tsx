@@ -36,7 +36,7 @@ export function PublicHero() {
 
       <div className="container relative z-10 pt-16 pb-20 sm:pt-20 sm:pb-24 text-white">
         {/* Header & Deskripsi Beranda (Tengah / Simetris Klasik) */}
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl text-center animate-fade-up">
           <span className="inline-flex items-center rounded-md bg-[#f2d35f] px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-[#2d2a16] shadow-xs">
             Layanan Aspirasi Yayasan BOPKRI
           </span>
@@ -72,7 +72,7 @@ export function PublicHero() {
         </div>
 
         {/* 2 Big Action Cards (Menonjol & Proporsional) */}
-        <div className="mx-auto mt-12 max-w-4xl">
+        <div className="mx-auto mt-12 max-w-4xl animate-fade-up-delay">
           <HomeActionPortal />
         </div>
       </div>

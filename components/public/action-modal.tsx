@@ -24,10 +24,33 @@ export function ActionModal({
   children,
 }: ActionModalProps) {
   const [mounted, setMounted] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Handle open / close animations
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true);
+      // Double requestAnimationFrame untuk memastikan initial state ter-render sebelum transisi aktif
+      const frame1 = requestAnimationFrame(() => {
+        const frame2 = requestAnimationFrame(() => {
+          setIsVisible(true);
+        });
+        return () => cancelAnimationFrame(frame2);
+      });
+      return () => cancelAnimationFrame(frame1);
+    } else {
+      setIsVisible(false);
+      const timer = setTimeout(() => {
+        setIsRendered(false);
+      }, 260); // Durasi transisi keluar selesai
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -48,7 +71,7 @@ export function ActionModal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen || !mounted) return null;
+  if (!isRendered || !mounted) return null;
 
   const maxWidthClass = {
     sm: "max-w-sm",
@@ -65,18 +88,24 @@ export function ActionModal({
       aria-modal="true"
       className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
     >
-      {/* Backdrop Lembut */}
+      {/* Backdrop Lembut dengan Efek Fade In & Fade Out Halus */}
       <div
-        className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs modal-backdrop-enter"
+        className={`fixed inset-0 bg-stone-900/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+          isVisible ? "opacity-100" : "opacity-0"
+        }`}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Modal Dialog Box (Klasik, Bersih & Terang) */}
+      {/* Modal Dialog Box dengan Animasi Meluncur Lembut (Fluid Glide & Spring Deceleration) */}
       <div
-        className={`relative z-10 flex max-h-[90vh] w-full ${maxWidthClass} flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xl modal-panel-enter my-auto`}
+        className={`relative z-10 flex max-h-[90vh] w-full ${maxWidthClass} flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xl my-auto transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isVisible
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-[0.95] translate-y-6"
+        }`}
       >
-        {/* Header Modal Bersih & Elegan (Tidak Terlalu Biru/Overkill) */}
+        {/* Header Modal Bersih & Elegan */}
         <header className="relative flex shrink-0 items-center justify-between border-b border-stone-200 bg-stone-50/90 px-6 py-4">
           <div className="flex items-center gap-3.5 pr-4">
             {Icon && (
@@ -100,7 +129,7 @@ export function ActionModal({
             type="button"
             onClick={onClose}
             aria-label="Tutup jendela"
-            className="grid size-8 shrink-0 place-items-center rounded-lg border border-stone-200 bg-white text-stone-400 transition hover:border-stone-300 hover:bg-stone-100 hover:text-stone-700 cursor-pointer shadow-xs"
+            className="grid size-8 shrink-0 place-items-center rounded-lg border border-stone-200 bg-white text-stone-400 transition hover:border-stone-300 hover:bg-stone-100 hover:text-stone-700 cursor-pointer shadow-xs active:scale-95"
           >
             <X size={17} />
           </button>

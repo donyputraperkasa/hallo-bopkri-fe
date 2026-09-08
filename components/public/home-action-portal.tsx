@@ -30,7 +30,7 @@ export function HomeActionPortal() {
               setActiveModal("complaint");
             }
           }}
-          className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-white p-7 text-left shadow-lg transition-all duration-200 hover:-translate-y-1.5 hover:border-[#1f4f8f] hover:shadow-2xl sm:p-8"
+          className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-white p-7 text-left shadow-lg transition-all duration-200 hover:-translate-y-1.5 hover:border-[#1f4f8f] hover:shadow-2xl active:scale-[0.985] active:translate-y-0 sm:p-8"
         >
           {/* Solid Classic Accent Top Border (tanpa gradasi) */}
           <span className="absolute inset-x-0 top-0 h-1.5 bg-[#1f4f8f]" />
@@ -50,7 +50,7 @@ export function HomeActionPortal() {
             </h3>
 
             <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-stone-600">
-              Sampaikan pertanyaan, apresiasi, atau keluhan Anda tanpa perlu login akun. Formulir mudah dan data Anda terjaga aman.
+              Sampaikan pertanyaan, apresiasi, atau keluhan Anda tanpa perlu memiliki akun. Formulir mudah dan data Anda terjaga aman.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ export function HomeActionPortal() {
               setActiveModal("tracking");
             }
           }}
-          className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-white p-7 text-left shadow-lg transition-all duration-200 hover:-translate-y-1.5 hover:border-[#1f4f8f] hover:shadow-2xl sm:p-8"
+          className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-white p-7 text-left shadow-lg transition-all duration-200 hover:-translate-y-1.5 hover:border-[#1f4f8f] hover:shadow-2xl active:scale-[0.985] active:translate-y-0 sm:p-8"
         >
           {/* Solid Classic Accent Top Border (tanpa gradasi) */}
           <span className="absolute inset-x-0 top-0 h-1.5 bg-[#f2d35f]" />
