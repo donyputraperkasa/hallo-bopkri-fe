@@ -13,35 +13,42 @@ export default async function TrackComplaintPage({
   const { ticket } = await searchParams;
   return (
     <PublicLayout>
-      <div className="classic-backdrop min-h-[calc(100vh-160px)] py-10 sm:py-16 relative overflow-hidden">
-        {/* Decorative Classic Background Elements */}
-        <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 size-[600px] rounded-full bg-gradient-to-b from-[#1f4f8f]/8 via-[#f2d35f]/5 to-transparent blur-3xl" />
-        <div className="pointer-events-none absolute top-40 -right-20 size-72 rounded-full bg-[#1f4f8f]/5 blur-2xl" />
-        <div className="pointer-events-none absolute bottom-20 -left-20 size-80 rounded-full bg-[#f2d35f]/10 blur-2xl" />
-
-        {/* Vintage subtle watermark emblem */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.025] select-none">
-          <ShieldCheck className="size-[580px] text-[#1f4f8f]" />
+      <div className="hero-building min-h-[calc(100vh-160px)] py-10 sm:py-16 relative overflow-hidden text-white">
+        {/* Ornamen dekoratif sudut: dot matrix kanan atas */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-8 right-8 hidden md:block opacity-20"
+        >
+          <div className="grid grid-cols-6 gap-3">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <span key={i} className="size-1.5 rounded-full bg-white" />
+            ))}
+          </div>
         </div>
+
+        {/* Ornamen cincin aksen emas kanan atas */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-20 right-16 hidden md:block size-14 rounded-full border-2 border-[#f2d35f]/30"
+        />
+
+        {/* Garis aksen emas horizontal di atas */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#f2d35f]/50 to-transparent"
+        />
 
         <section className="container relative z-10">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#1f4f8f]/20 bg-white/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#1f4f8f] shadow-xs backdrop-blur-xs">
-              <SearchCheck size={14} className="text-[#1f4f8f]" />
+            <span className="inline-flex items-center rounded-md bg-[#f2d35f] px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-[#2d2a16] shadow-xs">
               Pelacakan Status & Tindak Lanjut
-            </div>
+            </span>
 
-            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+            <h1 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl">
               Lacak Progres Aduan Anda
             </h1>
 
-            <div className="mx-auto my-3 flex items-center justify-center gap-2">
-              <span className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#1f4f8f]/30" />
-              <span className="size-1.5 rounded-full bg-[#f2d35f]" />
-              <span className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#1f4f8f]/30" />
-            </div>
-
-            <p className="mt-2 text-sm sm:text-base leading-relaxed text-stone-600">
+            <p className="mt-3 text-sm sm:text-base leading-relaxed text-blue-50/90 font-normal">
               Masukkan kode e-tiket resmi yang Anda peroleh saat mengirimkan laporan untuk melihat catatan dan tahapan penanganan oleh tim BOPKRI.
             </p>
           </div>

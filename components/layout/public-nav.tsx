@@ -14,7 +14,7 @@ export function PublicNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-1 rounded-2xl border border-white/70 bg-white/65 p-1.5 shadow-sm backdrop-blur">
+    <nav className="flex items-center gap-1 rounded-lg border border-[#d8e3f4] bg-white/80 p-1 shadow-xs backdrop-blur-md">
       {links.map(([label, href, Icon]) => {
         const active = pathname === href;
         return (
@@ -22,14 +22,14 @@ export function PublicNav() {
             key={href}
             href={href}
             aria-label={label}
-            className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold ${
+            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs sm:text-sm font-semibold transition ${
               active
-                ? "bg-[#1f4f8f] text-white shadow-md"
-                : "text-[#40516e] hover:bg-white hover:text-[#1f4f8f]"
+                ? "bg-[#1f4f8f] text-white shadow-xs"
+                : "text-[#526078] hover:bg-[#eef3fb] hover:text-[#1f4f8f]"
             }`}
           >
-            <Icon size={17} />
-            <span className="hidden md:inline">{label}</span>
+            <Icon size={16} />
+            <span className="hidden sm:inline">{label}</span>
           </Link>
         );
       })}

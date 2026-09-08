@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { X, type LucideIcon } from "lucide-react";
 
 interface ActionModalProps {
@@ -22,6 +23,12 @@ export function ActionModal({
   maxWidth = "2xl",
   children,
 }: ActionModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -41,7 +48,7 @@ export function ActionModal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const maxWidthClass = {
     sm: "max-w-sm",
@@ -52,25 +59,25 @@ export function ActionModal({
     "3xl": "max-w-3xl",
   }[maxWidth];
 
-  return (
+  const modalContent = (
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
     >
       {/* Backdrop Lembut */}
       <div
-        className="fixed inset-0 bg-stone-900/40 backdrop-blur-xs modal-backdrop-enter"
+        className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs modal-backdrop-enter"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog Box (Klasik, Bersih & Terang) */}
       <div
-        className={`relative z-10 flex max-h-[92vh] w-full ${maxWidthClass} flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xl modal-panel-enter`}
+        className={`relative z-10 flex max-h-[90vh] w-full ${maxWidthClass} flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xl modal-panel-enter my-auto`}
       >
         {/* Header Modal Bersih & Elegan (Tidak Terlalu Biru/Overkill) */}
-        <header className="relative flex shrink-0 items-center justify-between border-b border-stone-200 bg-stone-50/80 px-6 py-4">
+        <header className="relative flex shrink-0 items-center justify-between border-b border-stone-200 bg-stone-50/90 px-6 py-4">
           <div className="flex items-center gap-3.5 pr-4">
             {Icon && (
               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#eef4fb] text-[#1f4f8f] border border-[#d8e3f4] shadow-xs">
@@ -106,4 +113,6 @@ export function ActionModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

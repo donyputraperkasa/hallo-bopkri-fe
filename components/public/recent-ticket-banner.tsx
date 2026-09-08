@@ -41,17 +41,17 @@ export function RecentTicketBanner({ onTrack }: { onTrack: (ticketCode: string) 
   if (!latestTicket) return null;
 
   return (
-    <div className="mx-auto mt-6 max-w-2xl rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50/90 via-white to-blue-50/90 p-4 shadow-sm animate-in fade-in slide-in-from-top-3">
+    <div className="mx-auto mt-6 max-w-2xl rounded-xl border border-[#d8e3f4] bg-white p-4 shadow-xs animate-in fade-in slide-in-from-top-3">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-[#1f4f8f] text-white shadow-xs">
+          <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[#eef3fb] text-[#1f4f8f] border border-[#d8e3f4]">
             <Sparkles size={16} />
           </span>
           <div>
-            <p className="text-xs font-bold text-stone-900">
+            <p className="text-xs font-semibold text-[#526078]">
               Tiket Baru Saja Dikirim:
             </p>
-            <code className="font-mono text-sm font-black tracking-wide text-[#1f4f8f]">
+            <code className="font-mono text-sm font-semibold tracking-wide text-[#1f4f8f]">
               {latestTicket.ticketCode}
             </code>
           </div>
@@ -61,7 +61,7 @@ export function RecentTicketBanner({ onTrack }: { onTrack: (ticketCode: string) 
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1 rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-bold text-stone-700 hover:bg-stone-50 shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-md border border-[#d8e3f4] bg-[#f8fbff] px-3 py-1.5 text-xs font-semibold text-[#172033] hover:bg-white transition cursor-pointer"
           >
             {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
             <span>{copied ? "Tersalin!" : "Salin Kode"}</span>
@@ -70,7 +70,7 @@ export function RecentTicketBanner({ onTrack }: { onTrack: (ticketCode: string) 
           <button
             type="button"
             onClick={() => onTrack(latestTicket.ticketCode)}
-            className="inline-flex items-center gap-1 rounded-lg bg-[#1f4f8f] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#173b6b] shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-md bg-[#1f4f8f] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#193f72] transition shadow-xs cursor-pointer"
           >
             <Search size={14} />
             <span>Lacak</span>
@@ -79,8 +79,8 @@ export function RecentTicketBanner({ onTrack }: { onTrack: (ticketCode: string) 
           <button
             type="button"
             onClick={handleDismiss}
-            className="p-1.5 text-stone-400 hover:text-stone-700 transition cursor-pointer"
-            title="Tutup (Hapus sekarang)"
+            className="p-1.5 text-[#8c9bb0] hover:text-[#172033] transition cursor-pointer"
+            title="Tutup"
           >
             <X size={15} />
           </button>

@@ -3,16 +3,45 @@ import { Lock, ShieldCheck, TicketCheck } from "lucide-react";
 
 export function PublicHero() {
   return (
-    <section className="hero-building relative">
-      <div className="container pt-16 pb-20 sm:pt-20 sm:pb-24 text-white">
+    <section className="hero-building relative overflow-hidden text-white">
+      {/* Ornamen dekoratif sudut: dot matrix kanan atas */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-8 right-8 hidden md:block opacity-20"
+      >
+        <div className="grid grid-cols-6 gap-3">
+          {Array.from({ length: 30 }).map((_, i) => (
+            <span key={i} className="size-1.5 rounded-full bg-white" />
+          ))}
+        </div>
+      </div>
+
+      {/* Ornamen cincin aksen emas kanan atas */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-20 right-16 hidden md:block size-14 rounded-full border-2 border-[#f2d35f]/30"
+      />
+
+      {/* Ornamen aksen kotak halus di kiri */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/3 left-8 hidden md:block size-16 rounded-2xl border border-white/10 bg-white/[0.02]"
+      />
+
+      {/* Garis aksen emas horizontal di atas */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#f2d35f]/50 to-transparent"
+      />
+
+      <div className="container relative z-10 pt-16 pb-20 sm:pt-20 sm:pb-24 text-white">
         {/* Header & Deskripsi Beranda (Tengah / Simetris Klasik) */}
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#f2d35f]/40 bg-[#fff4bd]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#fff4bd] backdrop-blur-xs">
-            <span className="size-2 rounded-full bg-[#f2d35f]" />
+          <span className="inline-flex items-center rounded-md bg-[#f2d35f] px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-[#2d2a16] shadow-xs">
             Layanan Aspirasi Yayasan BOPKRI
-          </div>
+          </span>
 
-          <h1 className="mt-6 text-3xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-3xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
             Setiap suara layak{" "}
             <span className="text-[#f2d35f]">didengar</span>
             <br className="hidden sm:inline" /> dan{" "}
