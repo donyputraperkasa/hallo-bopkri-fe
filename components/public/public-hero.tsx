@@ -49,7 +49,7 @@ export function PublicHero() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-blue-50/90 font-normal">
-            Media resmi penyampaian pertanyaan, apresiasi, maupun keluhan seputar lingkungan Yayasan BOPKRI Yogyakarta. Praktis, tanpa login, dan terjamin kerahasiaannya.
+            Media resmi Yayasan BOPKRI Yogyakarta<br />Sampaikan Aspirasi, Apresiasi, dan Keluhan anda tanpa perlu memiliki akun.
           </p>
 
           {/* Quick info trust badges */}

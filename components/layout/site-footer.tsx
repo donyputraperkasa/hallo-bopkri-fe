@@ -2,8 +2,9 @@ import { CreatorFooter } from "./creator-footer";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 bg-white/75">
+    <footer className="mt-14 pb-8">
       <CreatorFooter />
     </footer>
   );
 }
+
