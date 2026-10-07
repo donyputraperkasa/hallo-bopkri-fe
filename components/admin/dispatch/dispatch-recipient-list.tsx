@@ -2,7 +2,7 @@
 
 import { Briefcase, Check, CheckCheck, RotateCcw, Users } from "lucide-react";
 import { BIDANG_TAGS } from "@/lib/constants";
-import type { AdminUser } from "./dispatch-types";
+import type { AdminUser } from "@/types";
 
 interface DispatchRecipientListProps {
   directors: AdminUser[];

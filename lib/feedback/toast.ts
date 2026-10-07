@@ -1,10 +1,6 @@
-export type ToastType = "error" | "success";
+import type { ToastType, ToastPayload } from "@/types";
 
-export type ToastPayload = {
-  message: string;
-  title?: string;
-  type?: ToastType;
-};
+export type { ToastType, ToastPayload };
 
 export const toastEventName = "mybopkri:toast";
 const pendingToastKey = "mybopkri.pending-toast";

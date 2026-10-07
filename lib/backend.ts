@@ -4,14 +4,9 @@ export const TOKEN_COOKIE = "hallo_admin_token";
 export const ROLE_COOKIE = "hallo_admin_role";
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:4000/api";
 
-export type AdminRole = "owner" | "director" | "manager";
+import type { AdminInfo, AdminRole } from "@/types";
 
-export interface AdminInfo {
-  role: AdminRole;
-  bidang: string | null;
-  displayName: string;
-  username: string;
-}
+export type { AdminInfo, AdminRole };
 
 type Context = { params: Promise<{ path: string[] }> };
 

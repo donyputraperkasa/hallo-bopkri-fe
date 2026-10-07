@@ -1,11 +1,6 @@
-import type { Category } from "@/types/api";
+import type { StoredTicket } from "@/types";
 
-export interface StoredTicket {
-  ticketCode: string;
-  category: Category;
-  createdAt: string;
-  expiresAt?: number;
-}
+export type { StoredTicket };
 
 const SESSION_KEY = "hallo_session_ticket";
 // Masa berlaku tiket sementara di sesi: 5 Menit (300.000 ms)

@@ -1,7 +1,7 @@
 "use client";
 
 import { Info } from "lucide-react";
-import type { AdminUser } from "./dispatch-types";
+import type { AdminUser } from "@/types";
 
 interface DispatchSummaryBoxProps {
   selectedUsers: AdminUser[];

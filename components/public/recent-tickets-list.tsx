@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Check, Copy, History, Trash2 } from "lucide-react";
 import { categoryLabel, formatDate } from "@/lib/constants";
-import type { StoredTicket } from "@/lib/client-tickets";
+import type { StoredTicket } from "@/types";
 
 interface RecentTicketsListProps {
   tickets: StoredTicket[];

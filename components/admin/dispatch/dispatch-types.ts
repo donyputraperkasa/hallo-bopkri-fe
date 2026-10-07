@@ -1,12 +1,6 @@
-import type { Complaint } from "@/types/api";
+import type { Complaint, AdminUser } from "@/types";
 
-export interface AdminUser {
-  id: string;
-  username: string;
-  role: "owner" | "director" | "manager";
-  bidang: string | null;
-  displayName: string | null;
-}
+export type { AdminUser };
 
 export function extractComplaintTags(item: Complaint): string[] {
   if (Array.isArray(item.tags) && item.tags.length > 0) {

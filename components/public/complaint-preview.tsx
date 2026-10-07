@@ -2,17 +2,10 @@
 
 import { ArrowLeft, FileText, Loader2, Send } from "lucide-react";
 import { BIDANG_TAGS, categoryLabel, getTagStyle } from "@/lib/constants";
-import type { Category } from "@/types/api";
+import type { Category, PreviewFileItem } from "@/types";
 import { PreviewAttachmentsList } from "./preview-attachments-list";
 
-export interface PreviewFileItem {
-  file: File;
-  name: string;
-  size: number;
-  type: string;
-  isImage: boolean;
-  url?: string;
-}
+export type { PreviewFileItem };
 
 interface ComplaintPreviewProps {
   category: Category;

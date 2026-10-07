@@ -3,8 +3,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Search, Ticket } from "lucide-react";
 import { api } from "@/lib/client-api";
-import { getStoredTickets, removeStoredTicket, type StoredTicket } from "@/lib/client-tickets";
-import type { TrackResult } from "@/types/api";
+import { getStoredTickets, removeStoredTicket } from "@/lib/client-tickets";
+import type { StoredTicket, TrackResult } from "@/types";
 import { TrackingResult } from "./tracking-result";
 import { RecentTicketsList } from "./recent-tickets-list";
 

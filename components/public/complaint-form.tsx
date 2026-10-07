@@ -4,10 +4,10 @@ import { FormEvent, useState, useMemo } from "react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
 import { saveSessionTicket } from "@/lib/client-tickets";
-import type { Category } from "@/types/api";
+import type { Category, PreviewFileItem, SubmittedComplaintDetails } from "@/types";
 import { ComplaintFields } from "./complaint-fields";
-import { ComplaintPreview, type PreviewFileItem } from "./complaint-preview";
-import { TicketSuccess, type SubmittedComplaintDetails } from "./ticket-success";
+import { ComplaintPreview } from "./complaint-preview";
+import { TicketSuccess } from "./ticket-success";
 
 export function ComplaintForm() {
   const { show } = useToast();

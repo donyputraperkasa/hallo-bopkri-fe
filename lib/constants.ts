@@ -1,7 +1,6 @@
 import {
   Building2,
   Coins,
-  FileText,
   FolderArchive,
   GraduationCap,
   Heart,
@@ -9,9 +8,10 @@ import {
   Megaphone,
   MessageSquareWarning,
   Users2,
-  type LucideIcon,
 } from "lucide-react";
-import type { Category } from "@/types/api";
+import type { Category, BidangTagConfig, BidangTagValue } from "@/types";
+
+export type { BidangTagConfig, BidangTagValue };
 
 /**
  * Pedoman Resmi Palet Warna Hijau (Success / Verified / Tersalin)
@@ -58,14 +58,6 @@ export const formatDate = (date: string) =>
     timeStyle: "short",
   }).format(new Date(date));
 
-export interface BidangTagConfig {
-  value: string;
-  label: string;
-  managerTitle: string;
-  icon: LucideIcon;
-  colorClass: string;
-  badgeColor: string;
-}
 
 export const BIDANG_TAGS: BidangTagConfig[] = [
   {
@@ -118,7 +110,6 @@ export const BIDANG_TAGS: BidangTagConfig[] = [
   },
 ];
 
-export type BidangTagValue = string;
 
 export const formatBytes = (bytes: number) => {
   if (bytes < 1024 * 1024) return `${Math.ceil(bytes / 1024)} KB`;

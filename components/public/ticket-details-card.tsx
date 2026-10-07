@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FileIcon, FileText, ImageIcon, Paperclip, X } from "lucide-react";
 import { BIDANG_TAGS, categoryLabel, formatBytes, getTagStyle } from "@/lib/constants";
-import type { SubmittedComplaintDetails } from "./ticket-success";
+import type { SubmittedComplaintDetails } from "@/types";
 
 export function TicketDetailsCard({ details }: { details: SubmittedComplaintDetails }) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);

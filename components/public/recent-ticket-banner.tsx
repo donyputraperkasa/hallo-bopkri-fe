@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Check, Copy, Search, Sparkles, X } from "lucide-react";
-import { getSessionTicket, clearSessionTicket, type StoredTicket } from "@/lib/client-tickets";
+import { getSessionTicket, clearSessionTicket } from "@/lib/client-tickets";
+import type { StoredTicket } from "@/types";
 
 export function RecentTicketBanner({ onTrack }: { onTrack: (ticketCode: string) => void }) {
   const [latestTicket, setLatestTicket] = useState<StoredTicket | null>(null);

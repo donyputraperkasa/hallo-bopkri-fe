@@ -3,25 +3,10 @@
 import Link from "next/link";
 import { CheckCircle2, Copy, Link2, Search, Check } from "lucide-react";
 import { useState } from "react";
-import type { Category } from "@/types/api";
+import type { Category, FileItemInfo, SubmittedComplaintDetails } from "@/types";
 import { TicketDetailsCard } from "./ticket-details-card";
 
-export interface FileItemInfo {
-  name: string;
-  size: number;
-  type: string;
-  url?: string;
-}
-
-export interface SubmittedComplaintDetails {
-  category: Category;
-  content: string;
-  reporterName?: string;
-  contact?: string;
-  tags?: string[];
-  attachmentsCount?: number;
-  files?: FileItemInfo[];
-}
+export type { FileItemInfo, SubmittedComplaintDetails };
 
 export function TicketSuccess({
   ticketCode,

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FileIcon, ImageIcon, X } from "lucide-react";
 import { formatBytes } from "@/lib/constants";
-import type { PreviewFileItem } from "./complaint-preview";
+import type { PreviewFileItem } from "@/types";
 
 export function PreviewAttachmentsList({ files }: { files: PreviewFileItem[] }) {
   const [modalImage, setModalImage] = useState<string | null>(null);

@@ -2,15 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export type AdminRole = "owner" | "director" | "manager";
+import type { AdminRole, AuthUser } from "@/types";
 
-export interface AuthUser {
-  id: string;
-  username: string;
-  role: AdminRole;
-  bidang: string | null;
-  displayName: string;
-}
+export type { AdminRole, AuthUser };
 
 export function useAuth() {
   const [user, setUser] = useState<AuthUser | null>(null);
