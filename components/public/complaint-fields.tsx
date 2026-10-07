@@ -2,27 +2,10 @@
 
 import { useRef } from "react";
 import { ArrowRight, Paperclip } from "lucide-react";
-import type { Category } from "@/types/api";
+import type { ComplaintFieldsProps } from "@/types";
 import { CategoryPicker } from "./category-picker";
 import { Tag } from "./complaint-tag";
 import { ComplainNote } from "./complain-note";
-
-interface ComplaintFieldsProps {
-  category: Category;
-  setCategory: (val: Category) => void;
-  reporterName: string;
-  setReporterName: (val: string) => void;
-  contact: string;
-  setContact: (val: string) => void;
-  content: string;
-  setContent: (val: string) => void;
-  selectedTags: string[];
-  setSelectedTags: (tags: string[]) => void;
-  files: File[];
-  onFilesChange: (files: File[]) => void;
-  error?: string;
-  onSubmit: (e: React.FormEvent) => void;
-}
 
 export function ComplaintFields({
   category,

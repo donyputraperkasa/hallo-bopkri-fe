@@ -3,13 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Check, X } from "lucide-react";
 import { BIDANG_TAGS, getTagStyle } from "@/lib/constants";
-
-interface TagProps {
-  value?: string[];
-  onChange?: (tags: string[]) => void;
-  name?: string;
-  placeholder?: string;
-}
+import type { TagProps } from "@/types";
 
 export function Tag({
   value,

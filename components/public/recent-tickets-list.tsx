@@ -3,13 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Check, Copy, History, Trash2 } from "lucide-react";
 import { categoryLabel, formatDate } from "@/lib/constants";
-import type { StoredTicket } from "@/types";
-
-interface RecentTicketsListProps {
-  tickets: StoredTicket[];
-  onSelect: (ticketCode: string) => void;
-  onRemove: (ticketCode: string, e: React.MouseEvent) => void;
-}
+import type { RecentTicketsListProps } from "@/types";
 
 export function RecentTicketsList({ tickets, onSelect, onRemove }: RecentTicketsListProps) {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);

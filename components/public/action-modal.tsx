@@ -1,18 +1,9 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, type LucideIcon } from "lucide-react";
-
-interface ActionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  subtitle?: string;
-  icon?: LucideIcon;
-  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
-  children: ReactNode;
-}
+import { X } from "lucide-react";
+import type { ActionModalProps } from "@/types";
 
 export function ActionModal({
   isOpen,

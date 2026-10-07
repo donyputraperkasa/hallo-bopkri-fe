@@ -2,23 +2,10 @@
 
 import { ArrowLeft, FileText, Loader2, Send } from "lucide-react";
 import { BIDANG_TAGS, categoryLabel, getTagStyle } from "@/lib/constants";
-import type { Category, PreviewFileItem } from "@/types";
+import type { PreviewFileItem, ComplaintPreviewProps } from "@/types";
 import { PreviewAttachmentsList } from "./preview-attachments-list";
 
 export type { PreviewFileItem };
-
-interface ComplaintPreviewProps {
-  category: Category;
-  reporterName: string;
-  contact: string;
-  content: string;
-  selectedTags: string[];
-  filePreviews: PreviewFileItem[];
-  loading: boolean;
-  error?: string;
-  onBack: () => void;
-  onSubmit: () => void;
-}
 
 export function ComplaintPreview({
   category,
