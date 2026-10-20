@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { useInactivityLogout } from "@/hooks/use-inactivity";
 import { showToast } from "@/lib/feedback/toast";
-import { CreatorFooter } from "@/components/layout/creator-footer";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminHeader } from "./admin-header";
 
@@ -87,9 +86,6 @@ export function AdminShell({
           <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-8">
             <div className="flex min-h-full flex-col gap-6">
               <div className="flex-1">{children}</div>
-              <div className="pt-4 pb-2">
-                <CreatorFooter />
-              </div>
             </div>
           </div>
         </section>
