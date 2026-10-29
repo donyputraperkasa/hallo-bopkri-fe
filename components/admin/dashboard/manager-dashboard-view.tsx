@@ -45,19 +45,19 @@ export function ManagerDashboardView() {
 
   const stats = [
     {
-      href: "/masdon/manager/aduan",
+      href: "/panel/manager/aduan",
       label: "Aduan Masuk",
       value: String(total),
       note: `Bidang ${tagInfo?.label ?? bidang ?? "Anda"}`,
     },
     {
-      href: "/masdon/manager/aduan",
+      href: "/panel/manager/aduan",
       label: "Belum Selesai",
       value: String(pendingCount),
       note: "Perlu tindak lanjut",
     },
     {
-      href: "/masdon/manager/aduan",
+      href: "/panel/manager/aduan",
       label: "Telah Selesai",
       value: String(completedCount),
       note: "Laporan tuntas",
@@ -87,7 +87,7 @@ export function ManagerDashboardView() {
           </div>
 
           <Link
-            href="/masdon/manager/aduan"
+            href="/panel/manager/aduan"
             className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#0f2a4f] px-4 text-sm font-semibold text-white transition hover:bg-[#173b6b]"
           >
             <ClipboardList size={16} aria-hidden="true" />
@@ -123,7 +123,7 @@ export function ManagerDashboardView() {
             </p>
           </div>
           <Link
-            href="/masdon/manager/aduan"
+            href="/panel/manager/aduan"
             className="text-sm font-semibold text-[#0f2a4f] hover:underline"
           >
             Lihat Semua

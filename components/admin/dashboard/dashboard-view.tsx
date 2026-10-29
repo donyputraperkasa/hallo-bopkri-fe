@@ -50,7 +50,7 @@ export function DashboardView() {
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href="/masdon/aduan"
+              href="/panel/aduan"
               className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#0f2a4f] px-4 text-sm font-semibold text-white transition hover:bg-[#173b6b]"
             >
               <ClipboardList size={16} aria-hidden="true" />

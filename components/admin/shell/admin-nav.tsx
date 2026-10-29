@@ -7,19 +7,19 @@ import { usePathname } from "next/navigation";
 type AdminRole = "owner" | "director" | "manager";
 
 const ownerMenus = [
-  ["Dashboard", "/masdon/dashboard", ChartNoAxesColumn],
-  ["Daftar Aduan", "/masdon/aduan", ClipboardList],
-  ["Status Aduan", "/masdon/status", SlidersHorizontal],
+  ["Dashboard", "/panel/dashboard", ChartNoAxesColumn],
+  ["Daftar Aduan", "/panel/aduan", ClipboardList],
+  ["Status Aduan", "/panel/status", SlidersHorizontal],
 ] as const;
 
 const directorMenus = [
-  ["Dashboard", "/masdon/director/dashboard", ChartNoAxesColumn],
-  ["Semua Aduan", "/masdon/director/aduan", ClipboardList],
+  ["Dashboard", "/panel/director/dashboard", ChartNoAxesColumn],
+  ["Semua Aduan", "/panel/director/aduan", ClipboardList],
 ] as const;
 
 const managerMenus = [
-  ["Dashboard", "/masdon/manager/dashboard", ChartNoAxesColumn],
-  ["Aduan Bidang Saya", "/masdon/manager/aduan", ClipboardList],
+  ["Dashboard", "/panel/manager/dashboard", ChartNoAxesColumn],
+  ["Aduan Bidang Saya", "/panel/manager/aduan", ClipboardList],
 ] as const;
 
 function getMenus(role: AdminRole) {
@@ -43,9 +43,9 @@ export function AdminNav({
       {menus.map(([label, href, Icon]) => {
         const active =
           pathname === href ||
-          (href !== "/masdon/dashboard" &&
-            href !== "/masdon/director/dashboard" &&
-            href !== "/masdon/manager/dashboard" &&
+          (href !== "/panel/dashboard" &&
+            href !== "/panel/director/dashboard" &&
+            href !== "/panel/manager/dashboard" &&
             pathname.startsWith(href));
 
         return (

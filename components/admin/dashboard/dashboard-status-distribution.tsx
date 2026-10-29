@@ -14,7 +14,7 @@ export function DashboardStatusDistribution({ data }: { data: Dashboard }) {
           </p>
         </div>
         <Link
-          href="/masdon/status"
+          href="/panel/status"
           className="text-sm font-semibold text-[#0f2a4f] hover:underline"
         >
           Kelola Status

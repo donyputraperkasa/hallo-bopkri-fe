@@ -4,13 +4,14 @@ import { FormEvent, useEffect, useState } from "react";
 import { ArrowRight, Eye, EyeOff, Info, LockKeyhole, User } from "lucide-react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
+import { ADMIN_ACTIVITY_STORAGE_KEY } from "@/hooks/use-inactivity";
 
 type AdminRole = "owner" | "director" | "manager";
 
 function dashboardFor(role: AdminRole): string {
-  if (role === "director") return "/masdon/director/dashboard";
-  if (role === "manager") return "/masdon/manager/dashboard";
-  return "/masdon/dashboard";
+  if (role === "director") return "/panel/director/dashboard";
+  if (role === "manager") return "/panel/manager/dashboard";
+  return "/panel/dashboard";
 }
 
 export function LoginForm() {
@@ -48,7 +49,7 @@ export function LoginForm() {
       );
       // Reset timestamp aktivitas saat login berhasil
       if (typeof window !== "undefined") {
-        localStorage.setItem("hallo_admin_last_activity", Date.now().toString());
+        localStorage.setItem(ADMIN_ACTIVITY_STORAGE_KEY, Date.now().toString());
       }
       show(`Login berhasil. Selamat datang, ${data.displayName ?? "Admin"}!`);
       window.location.assign(dashboardFor(data.role));

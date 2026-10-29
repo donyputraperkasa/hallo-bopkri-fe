@@ -115,7 +115,7 @@ export function ComplaintDetail({ id }: { id: string }) {
   return (
     <div className="space-y-5">
       <Link
-        href="/masdon/aduan"
+        href="/panel/aduan"
         className="inline-flex items-center gap-2 text-sm font-semibold text-[#0f2a4f] hover:underline"
       >
         <ArrowLeft size={16} /> Kembali ke Daftar Aduan

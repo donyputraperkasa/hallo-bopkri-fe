@@ -37,13 +37,13 @@ export function DirectorDashboardView() {
 
   const stats = [
     {
-      href: "/masdon/director/aduan",
+      href: "/panel/director/aduan",
       label: "Total Aduan",
       value: String(data.total),
       note: "Semua laporan yayasan",
     },
     ...data.byCategory.map((item) => ({
-      href: `/masdon/director/aduan?category=${item.category}`,
+      href: `/panel/director/aduan?category=${item.category}`,
       label: categoryLabel(item.category),
       value: String(item._count),
       note: "Kategori aduan",
@@ -65,7 +65,7 @@ export function DirectorDashboardView() {
           </div>
 
           <Link
-            href="/masdon/director/aduan"
+            href="/panel/director/aduan"
             className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#0f2a4f] px-4 text-sm font-semibold text-white transition hover:bg-[#173b6b]"
           >
             <ClipboardList size={16} aria-hidden="true" />
@@ -101,7 +101,7 @@ export function DirectorDashboardView() {
             </p>
           </div>
           <Link
-            href="/masdon/director/aduan"
+            href="/panel/director/aduan"
             className="text-sm font-semibold text-[#0f2a4f] hover:underline"
           >
             Buka Daftar Aduan

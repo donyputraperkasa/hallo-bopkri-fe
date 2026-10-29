@@ -14,7 +14,7 @@ export function DashboardQuickActions({ total }: { total: number }) {
 
         <div className="mt-5 space-y-3">
           <Link
-            href="/masdon/aduan"
+            href="/panel/aduan"
             className="flex w-full items-center justify-between rounded-md bg-white/8 px-4 py-3 text-sm font-semibold transition hover:bg-white/14"
           >
             <span className="flex items-center gap-3">
@@ -25,7 +25,7 @@ export function DashboardQuickActions({ total }: { total: number }) {
           </Link>
 
           <Link
-            href="/masdon/status"
+            href="/panel/status"
             className="flex w-full items-center justify-between rounded-md bg-white/8 px-4 py-3 text-sm font-semibold transition hover:bg-white/14"
           >
             <span className="flex items-center gap-3">

@@ -2,17 +2,34 @@
 
 import { useEffect } from "react";
 
-// Batas inaktivitas 60 menit (dalam milidetik)
-const INACTIVITY_LIMIT_MS = 60 * 60 * 1000;
-const STORAGE_KEY = "hallo_admin_last_activity";
+function parseDurationMs(raw: string | undefined, fallbackMs: number): number {
+  if (!raw) return fallbackMs;
+  const trimmed = raw.trim();
+  const match = /^(\d+(?:\.\d+)?)\s*(ms|s|m|h|d)?$/i.exec(trimmed);
+  if (!match) return fallbackMs;
+  const value = parseFloat(match[1]);
+  const unit = (match[2] ?? "ms").toLowerCase();
+  if (unit === "d") return value * 24 * 60 * 60 * 1000;
+  if (unit === "h") return value * 60 * 60 * 1000;
+  if (unit === "m") return value * 60 * 1000;
+  if (unit === "s") return value * 1000;
+  return value;
+}
+
+const INACTIVITY_LIMIT_MS = parseDurationMs(
+  process.env.NEXT_PUBLIC_INACTIVITY_LIMIT_MS,
+  60 * 60 * 1000,
+);
+export const ADMIN_ACTIVITY_STORAGE_KEY =
+  process.env.NEXT_PUBLIC_STORAGE_KEY ?? "hallo_admin_last_activity";
 
 export function useInactivityLogout(enabled = true) {
   useEffect(() => {
     if (!enabled || typeof window === "undefined") return;
 
     // Catat aktivitas pertama saat komponen dimuat jika belum ada
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      localStorage.setItem(STORAGE_KEY, Date.now().toString());
+    if (!localStorage.getItem(ADMIN_ACTIVITY_STORAGE_KEY)) {
+      localStorage.setItem(ADMIN_ACTIVITY_STORAGE_KEY, Date.now().toString());
     }
 
     const logoutDueToInactivity = async () => {
@@ -21,12 +38,12 @@ export function useInactivityLogout(enabled = true) {
       } catch {
         // Abaikan kegagalan network saat logout
       }
-      localStorage.removeItem(STORAGE_KEY);
-      window.location.assign("/login?expired=1");
+      localStorage.removeItem(ADMIN_ACTIVITY_STORAGE_KEY);
+      window.location.assign("/panel/login?expired=1");
     };
 
     const verifyActivity = () => {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = localStorage.getItem(ADMIN_ACTIVITY_STORAGE_KEY);
       const lastActive = stored ? parseInt(stored, 10) : Date.now();
       const elapsed = Date.now() - lastActive;
 
@@ -40,7 +57,7 @@ export function useInactivityLogout(enabled = true) {
     const recordActivity = () => {
       if (!throttleTimeout) {
         throttleTimeout = setTimeout(() => {
-          localStorage.setItem(STORAGE_KEY, Date.now().toString());
+          localStorage.setItem(ADMIN_ACTIVITY_STORAGE_KEY, Date.now().toString());
           throttleTimeout = null;
         }, 1000);
       }

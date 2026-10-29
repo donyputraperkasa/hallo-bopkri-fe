@@ -26,10 +26,10 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const dashboardLink =
     role === "owner"
-      ? "/masdon/dashboard"
+      ? "/panel/dashboard"
       : role === "director"
-      ? "/masdon/director/dashboard"
-      : "/masdon/manager/dashboard";
+      ? "/panel/director/dashboard"
+      : "/panel/manager/dashboard";
 
   return (
     <aside

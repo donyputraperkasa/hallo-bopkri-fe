@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 
-export const TOKEN_COOKIE = "hallo_admin_token";
-export const ROLE_COOKIE = "hallo_admin_role";
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:4000/api";
+export const TOKEN_COOKIE = process.env.TOKEN_COOKIE ?? "hallo_admin_token";
+export const ROLE_COOKIE = process.env.ROLE_COOKIE ?? "hallo_admin_role";
+export const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:4000/api";
 
 import type { AdminInfo, AdminRole } from "@/types";
 

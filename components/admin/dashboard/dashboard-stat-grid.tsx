@@ -7,13 +7,13 @@ import type { Dashboard } from "@/types/api";
 export function DashboardStatGrid({ data }: { data: Dashboard }) {
   const stats = [
     {
-      href: "/masdon/aduan",
+      href: "/panel/aduan",
       label: "Total Aduan",
       value: String(data.total),
       note: "Semua laporan masuk",
     },
     ...data.byCategory.map((item) => ({
-      href: `/masdon/aduan?category=${item.category}`,
+      href: `/panel/aduan?category=${item.category}`,
       label: categoryLabel(item.category),
       value: String(item._count),
       note: "Kategori aduan",

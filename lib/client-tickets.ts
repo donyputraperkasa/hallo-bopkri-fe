@@ -2,9 +2,26 @@ import type { StoredTicket } from "@/types";
 
 export type { StoredTicket };
 
-const SESSION_KEY = "hallo_session_ticket";
-// Masa berlaku tiket sementara di sesi: 5 Menit (300.000 ms)
-const SESSION_TTL_MS = 5 * 60 * 1000;
+function parseDurationMs(raw: string | undefined, fallbackMs: number): number {
+  if (!raw) return fallbackMs;
+  const trimmed = raw.trim();
+  const match = /^(\d+(?:\.\d+)?)\s*(ms|s|m|h|d)?$/i.exec(trimmed);
+  if (!match) return fallbackMs;
+  const value = parseFloat(match[1]);
+  const unit = (match[2] ?? "ms").toLowerCase();
+  if (unit === "d") return value * 24 * 60 * 60 * 1000;
+  if (unit === "h") return value * 60 * 60 * 1000;
+  if (unit === "m") return value * 60 * 1000;
+  if (unit === "s") return value * 1000;
+  return value;
+}
+
+const SESSION_KEY = process.env.NEXT_PUBLIC_SESSION_KEY ?? "hallo_session_ticket";
+// Masa berlaku tiket sementara di sesi: default 5 Menit (300.000 ms)
+const SESSION_TTL_MS = parseDurationMs(
+  process.env.NEXT_PUBLIC_SESSION_TTL_MS,
+  5 * 60 * 1000,
+);
 
 export function getSessionTicket(): StoredTicket | null {
   if (typeof window === "undefined") return null;
@@ -32,7 +49,7 @@ export function saveSessionTicket(ticket: Omit<StoredTicket, "expiresAt">) {
       expiresAt: Date.now() + SESSION_TTL_MS,
     };
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-    localStorage.removeItem("hallo_my_tickets");
+    localStorage.removeItem(SESSION_KEY);
   } catch {
     // Ignore
   }
@@ -42,7 +59,7 @@ export function clearSessionTicket() {
   if (typeof window === "undefined") return;
   try {
     sessionStorage.removeItem(SESSION_KEY);
-    localStorage.removeItem("hallo_my_tickets");
+    localStorage.removeItem(SESSION_KEY);
   } catch {
     // Ignore
   }

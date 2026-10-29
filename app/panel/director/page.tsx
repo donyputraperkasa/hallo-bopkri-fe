@@ -1,4 +1,4 @@
 import { redirect } from "next/navigation";
 export default function DirectorPage() {
-  redirect("/masdon/director/dashboard");
+  redirect("/panel/director/dashboard");
 }
