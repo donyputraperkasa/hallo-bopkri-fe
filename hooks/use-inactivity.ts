@@ -22,7 +22,7 @@ export function useInactivityLogout(enabled = true) {
         // Abaikan kegagalan network saat logout
       }
       localStorage.removeItem(STORAGE_KEY);
-      window.location.assign("/masdon/login?expired=1");
+      window.location.assign("/login?expired=1");
     };
 
     const verifyActivity = () => {

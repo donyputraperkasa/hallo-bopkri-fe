@@ -16,10 +16,10 @@ export function proxy(request: NextRequest) {
   const role = (["owner", "director", "manager"].includes(rawRole) ? rawRole : "owner") as AdminRole;
   const pathname = request.nextUrl.pathname;
 
-  const isLogin = pathname === "/masdon/login";
+  const isLogin = pathname === "/login";
 
   if (!hasSession && !isLogin) {
-    return NextResponse.redirect(new URL("/masdon/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
   if (hasSession && isLogin) {
     return NextResponse.redirect(new URL(dashboardFor(role), request.url));

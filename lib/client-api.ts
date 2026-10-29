@@ -7,7 +7,7 @@ export async function readResponse<T>(response: Response): Promise<T> {
 
   if (!response.ok) {
     if (response.status === 401 && typeof window !== "undefined" && window.location.pathname.startsWith("/masdon")) {
-      window.location.assign("/masdon/login");
+      window.location.assign("/login");
     }
     const message =
       typeof body === "object" && body
