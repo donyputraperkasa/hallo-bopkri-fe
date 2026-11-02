@@ -27,14 +27,6 @@ Dibangun menggunakan **Next.js 16 (App Router)**, **React 19**, **TypeScript**, 
 - **Tiket Sementara di Sesi**: Kode tiket yang baru dikirim tersimpan sementara di sesi browser (default 5 menit) agar pelapor mudah menyalin kode tiketnya.
 - **Lacak Tiket (`/lacak-aduan`)**: Pantau status tindak lanjut dan riwayat penanganan laporan secara *real-time* menggunakan kode tiket.
 
-### 2. Panel Pengurus / Admin (`/panel`)
-- **Multi-Role Dashboard**: Antarmuka dan hak akses terpisah untuk **Owner**, **Direktur (`director`)**, dan **Manajer Bidang (`manager`)**.
-- **Manajemen & Disposisi Aduan**: Owner dapat memantau seluruh aduan, memperbarui status penanganan, dan mendisposisikan aduan ke bidang terkait (Pendidikan, SDM, Keuangan, Sarpras, Humas, dll.).
-- **Manajemen Status Aduan**: Pengelolaan master status laporan beserta warna indikator dan penanda status akhir (*final status*).
-- **Keamanan & Auto-Logout Inaktivitas**: Sesi menggunakan *HTTP-only cookie* dan otomatis keluar (*logout*) apabila tidak ada aktivitas pengguna melampaui batas waktu yang ditentukan.
-
----
-
 ## Teknologi yang Digunakan
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router & Route Proxy)
@@ -65,20 +57,6 @@ Buat file `.env.local` di direktori utama (*root*) proyek dan sesuaikan nilainya
 ```bash
 npm run dev
 ```
-
-Buka [http://localhost:3000](http://localhost:3000) di browser untuk mengakses halaman publik.
-
----
-
-> **Catatan Format Durasi Waktu:**
-> Variabel `NEXT_PUBLIC_INACTIVITY_LIMIT_MS` dan `NEXT_PUBLIC_SESSION_TTL_MS` mendukung angka milidetik langsung (mis. `"3600000"`) maupun format satuan waktu:
-> - `ms` = milidetik (contoh: `"5000ms"`)
-> - `s` = detik (contoh: `"30s"`)
-> - `m` = menit (contoh: `"5m"`, `"60m"`)
-> - `h` = jam (contoh: `"2h"`)
-> - `d` = hari (contoh: `"1D"`)
-
----
 
 ## Panduan Login & Akses Panel Pengurus
 
