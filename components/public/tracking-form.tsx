@@ -16,7 +16,10 @@ export function TrackingForm({ initialTicket = "" }: { initialTicket?: string })
   const [recentTickets, setRecentTickets] = useState<StoredTicket[]>([]);
 
   useEffect(() => {
-    setRecentTickets(getStoredTickets());
+    const frameId = requestAnimationFrame(() => {
+      setRecentTickets(getStoredTickets());
+    });
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   async function performTrack(codeToTrack: string) {

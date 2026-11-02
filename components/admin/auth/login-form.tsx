@@ -25,7 +25,10 @@ export function LoginForm() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("expired") === "1" || params.get("reason") === "inactivity") {
-        setInactivityNotice(true);
+        const frameId = requestAnimationFrame(() => {
+          setInactivityNotice(true);
+        });
+        return () => cancelAnimationFrame(frameId);
       }
     }
   }, []);

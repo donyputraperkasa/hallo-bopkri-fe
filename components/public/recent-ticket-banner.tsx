@@ -10,19 +10,26 @@ export function RecentTicketBanner({ onTrack }: { onTrack: (ticketCode: string) 
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const current = getSessionTicket();
-    setLatestTicket(current);
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const frameId = requestAnimationFrame(() => {
+      const current = getSessionTicket();
+      setLatestTicket(current);
 
-    if (current?.expiresAt) {
-      const remainingMs = current.expiresAt - Date.now();
-      if (remainingMs > 0) {
-        const timer = setTimeout(() => {
-          clearSessionTicket();
-          setLatestTicket(null);
-        }, remainingMs);
-        return () => clearTimeout(timer);
+      if (current?.expiresAt) {
+        const remainingMs = current.expiresAt - Date.now();
+        if (remainingMs > 0) {
+          timer = setTimeout(() => {
+            clearSessionTicket();
+            setLatestTicket(null);
+          }, remainingMs);
+        }
       }
-    }
+    });
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   const handleCopy = async () => {
