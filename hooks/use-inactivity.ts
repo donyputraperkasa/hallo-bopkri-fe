@@ -21,7 +21,7 @@ const INACTIVITY_LIMIT_MS = parseDurationMs(
   60 * 60 * 1000,
 );
 export const ADMIN_ACTIVITY_STORAGE_KEY =
-  process.env.NEXT_PUBLIC_STORAGE_KEY ?? "hallo_admin_last_activity";
+  process.env.NEXT_PUBLIC_STORAGE_KEY ?? "";
 
 export function useInactivityLogout(enabled = true) {
   useEffect(() => {

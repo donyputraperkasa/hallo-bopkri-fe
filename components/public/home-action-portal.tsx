@@ -33,7 +33,7 @@ export function HomeActionPortal() {
           className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-white p-7 text-left shadow-lg transition-all duration-200 hover:-translate-y-1.5 hover:border-[#1f4f8f] hover:shadow-2xl active:scale-[0.985] active:translate-y-0 sm:p-8"
         >
           {/* Solid Classic Accent Top Border (tanpa gradasi) */}
-          <span className="absolute inset-x-0 top-0 h-1.5 bg-[#1f4f8f]" />
+          <span className="absolute inset-x-0 top-0 h-1.5 bg-pink-500" />
 
           <div>
             <div className="flex items-center justify-between gap-3">
