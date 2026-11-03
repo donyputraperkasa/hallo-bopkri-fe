@@ -9,6 +9,11 @@ interface AdminHeaderProps {
 }
 
 export function AdminHeader({ name, roleLabel, onOpenMenu }: AdminHeaderProps) {
+  const currentMonthYear = new Intl.DateTimeFormat("id-ID", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date());
+
   return (
     <header className="sticky top-0 z-20 border-b border-[#dbe5f4] bg-[#f8fbff]/92 px-4 py-4 backdrop-blur lg:px-8">
       <div className="flex items-center justify-between gap-4">
@@ -34,7 +39,7 @@ export function AdminHeader({ name, roleLabel, onOpenMenu }: AdminHeaderProps) {
         <div className="hidden items-center gap-3 md:flex">
           <div className="inline-flex h-10 items-center gap-2 rounded-md border border-[#dbe5f4] bg-white px-3 text-sm font-semibold text-[#526078] shadow-sm">
             <CalendarDays size={16} aria-hidden="true" />
-            Agustus 2026
+            {currentMonthYear}
           </div>
           <div className="rounded-full bg-[#f2d35f] px-4 py-2 text-sm font-semibold text-[#172033] shadow-xs">
             {roleLabel}
