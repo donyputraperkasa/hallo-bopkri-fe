@@ -11,10 +11,13 @@ function normalizeBackendUrl(raw: string): string {
   return cleaned.endsWith("/api") ? cleaned : `${cleaned}/api`;
 }
 
-export const TOKEN_COOKIE = cleanEnv(process.env.TOKEN_COOKIE);
-export const ROLE_COOKIE = cleanEnv(process.env.ROLE_COOKIE);
+export const TOKEN_COOKIE = cleanEnv(process.env.TOKEN_COOKIE, "hallo_admin_token");
+export const ROLE_COOKIE = cleanEnv(process.env.ROLE_COOKIE, "hallo_admin_role");
 export const BACKEND_URL = normalizeBackendUrl(
-  cleanEnv(process.env.BACKEND_URL ?? process.env.NEXT_PUBLIC_API_URL),
+  cleanEnv(
+    process.env.BACKEND_URL ?? process.env.NEXT_PUBLIC_API_URL,
+    "http://localhost:4000/api",
+  ),
 );
 
 import type { AdminInfo, AdminRole } from "@/types";

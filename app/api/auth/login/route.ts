@@ -2,15 +2,32 @@ import { NextResponse } from "next/server";
 import { TOKEN_COOKIE, ROLE_COOKIE, BACKEND_URL } from "@/lib/backend";
 
 export async function POST(request: Request) {
+  let response: Response;
   try {
-    const response = await fetch(`${BACKEND_URL}/admin/auth/login`, {
+    const bodyText = await request.text();
+    response = await fetch(`${BACKEND_URL}/admin/auth/login`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: await request.text(),
+      body: bodyText,
       cache: "no-store",
     });
-    const data = await response.json();
-    if (!response.ok) return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json(
+      { message: `Backend tidak dapat dihubungi (${detail}).` },
+      { status: 502 },
+    );
+  }
+
+  try {
+    const contentType = response.headers.get("content-type") ?? "";
+    const data = contentType.includes("application/json")
+      ? await response.json()
+      : { message: await response.text() };
+
+    if (!response.ok) {
+      return NextResponse.json(data, { status: response.status });
+    }
 
     const userRole = (data.role?.toLowerCase() ?? "owner") as "owner" | "director" | "manager";
 
@@ -30,16 +47,17 @@ export async function POST(request: Request) {
       maxAge: 60 * 60, // 60 menit
     };
 
-    result.cookies.set(TOKEN_COOKIE, data.accessToken, cookieOpts);
-    result.cookies.set(ROLE_COOKIE, userRole, {
+    result.cookies.set(TOKEN_COOKIE || "hallo_admin_token", data.accessToken ?? "", cookieOpts);
+    result.cookies.set(ROLE_COOKIE || "hallo_admin_role", userRole, {
       ...cookieOpts,
       httpOnly: false, // Bisa dibaca JS untuk routing & navigasi
     });
 
     return result;
-  } catch {
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { message: "Backend tidak dapat dihubungi." },
+      { message: `Gagal memproses respons login (${detail}).` },
       { status: 502 },
     );
   }

@@ -21,7 +21,7 @@ function parseDurationMs(raw: string | undefined, fallbackMs: number): number {
   return value;
 }
 
-const SESSION_KEY = cleanEnv(process.env.NEXT_PUBLIC_SESSION_KEY);
+const SESSION_KEY = cleanEnv(process.env.NEXT_PUBLIC_SESSION_KEY, "hallo_session_ticket");
 // Masa berlaku tiket sementara di sesi: default 5 Menit (300.000 ms)
 const SESSION_TTL_MS = parseDurationMs(
   process.env.NEXT_PUBLIC_SESSION_TTL_MS,
