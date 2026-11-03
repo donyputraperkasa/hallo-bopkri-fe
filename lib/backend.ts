@@ -1,8 +1,21 @@
 import { cookies } from "next/headers";
 
-export const TOKEN_COOKIE = process.env.TOKEN_COOKIE ?? "";
-export const ROLE_COOKIE = process.env.ROLE_COOKIE ?? "";
-export const BACKEND_URL = process.env.BACKEND_URL ?? "";
+function cleanEnv(val: string | undefined, fallback = ""): string {
+  if (!val) return fallback;
+  return val.trim().replace(/^["']|["']$/g, "");
+}
+
+function normalizeBackendUrl(raw: string): string {
+  const cleaned = raw.replace(/\/+$/, "");
+  if (!cleaned) return "";
+  return cleaned.endsWith("/api") ? cleaned : `${cleaned}/api`;
+}
+
+export const TOKEN_COOKIE = cleanEnv(process.env.TOKEN_COOKIE);
+export const ROLE_COOKIE = cleanEnv(process.env.ROLE_COOKIE);
+export const BACKEND_URL = normalizeBackendUrl(
+  cleanEnv(process.env.BACKEND_URL ?? process.env.NEXT_PUBLIC_API_URL),
+);
 
 import type { AdminInfo, AdminRole } from "@/types";
 

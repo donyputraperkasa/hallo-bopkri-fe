@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { TOKEN_COOKIE, ROLE_COOKIE } from "@/lib/backend";
-
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:4000/api";
+import { TOKEN_COOKIE, ROLE_COOKIE, BACKEND_URL } from "@/lib/backend";
 
 export async function POST(request: Request) {
   try {

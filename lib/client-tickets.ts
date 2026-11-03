@@ -2,10 +2,15 @@ import type { StoredTicket } from "@/types";
 
 export type { StoredTicket };
 
+function cleanEnv(raw: string | undefined, fallback = ""): string {
+  if (!raw) return fallback;
+  return raw.trim().replace(/^["']|["']$/g, "");
+}
+
 function parseDurationMs(raw: string | undefined, fallbackMs: number): number {
-  if (!raw) return fallbackMs;
-  const trimmed = raw.trim();
-  const match = /^(\d+(?:\.\d+)?)\s*(ms|s|m|h|d)?$/i.exec(trimmed);
+  const cleaned = cleanEnv(raw);
+  if (!cleaned) return fallbackMs;
+  const match = /^(\d+(?:\.\d+)?)\s*(ms|s|m|h|d)?$/i.exec(cleaned);
   if (!match) return fallbackMs;
   const value = parseFloat(match[1]);
   const unit = (match[2] ?? "ms").toLowerCase();
@@ -16,7 +21,7 @@ function parseDurationMs(raw: string | undefined, fallbackMs: number): number {
   return value;
 }
 
-const SESSION_KEY = process.env.NEXT_PUBLIC_SESSION_KEY ?? "";
+const SESSION_KEY = cleanEnv(process.env.NEXT_PUBLIC_SESSION_KEY);
 // Masa berlaku tiket sementara di sesi: default 5 Menit (300.000 ms)
 const SESSION_TTL_MS = parseDurationMs(
   process.env.NEXT_PUBLIC_SESSION_TTL_MS,
