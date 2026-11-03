@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { Toaster } from "@/components/feedback/toaster";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 const sansFont = Plus_Jakarta_Sans({
   variable: "--font-sans-custom",
@@ -43,6 +44,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
           <Toaster />
         </ToastProvider>
+
+        <Analytics />
       </body>
     </html>
   );
