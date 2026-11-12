@@ -56,7 +56,7 @@ export function HomeActionPortal() {
 
           <div className="mt-8 flex items-center justify-between border-t border-stone-100 pt-5">
             <span className="text-sm font-bold text-[#1f4f8f]">
-              Buka Formulir Aduan
+              Buka Formulir
             </span>
             <span className="grid size-9 place-items-center rounded-full bg-[#eef4fb] text-[#1f4f8f] transition-all group-hover:bg-[#1f4f8f] group-hover:text-white group-hover:translate-x-1">
               <ArrowRight size={17} />
@@ -104,7 +104,7 @@ export function HomeActionPortal() {
 
           <div className="mt-8 flex items-center justify-between border-t border-stone-100 pt-5">
             <span className="text-sm font-bold text-[#1f4f8f]">
-              Cek Status Aduan
+              Cek Status
             </span>
             <span className="grid size-9 place-items-center rounded-full bg-[#fff9df] text-[#8a6800] transition-all group-hover:bg-[#1f4f8f] group-hover:text-white group-hover:translate-x-1">
               <ArrowRight size={17} />

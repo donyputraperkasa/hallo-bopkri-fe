@@ -113,7 +113,7 @@ export function ComplaintFields({
       {error && <p className="error-box">{error}</p>}
 
       <button className="btn-primary w-full shadow-md cursor-pointer" type="submit">
-        <span>Pratinjau Aduan</span>
+        <span>Pratinjau Isian</span>
         <ArrowRight size={17} />
       </button>
 

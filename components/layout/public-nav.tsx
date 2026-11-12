@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 
 const links = [
   ["Beranda", "/", Home],
-  ["Kirim Aduan", "/kirim-aduan", Send],
-  ["Lacak Tiket", "/lacak-aduan", Search],
+  ["Kirim Formulir", "/kirim-formulir", Send],
+  ["Lacak Status", "/lacak-status", Search],
 ] as const;
 
 export function PublicNav() {
