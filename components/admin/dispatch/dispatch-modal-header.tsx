@@ -1,11 +1,8 @@
 "use client";
 
 import { SendHorizontal, X } from "lucide-react";
+import type { DispatchModalHeaderProps } from "@/types/admin";
 
-interface DispatchModalHeaderProps {
-  ticketCode: string;
-  onClose: () => void;
-}
 
 export function DispatchModalHeader({ ticketCode, onClose }: DispatchModalHeaderProps) {
   return (

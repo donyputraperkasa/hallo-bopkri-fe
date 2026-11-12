@@ -4,16 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LogOut, X } from "lucide-react";
 import { AdminNav } from "./admin-nav";
-
-interface AdminSidebarProps {
-  role: "owner" | "director" | "manager";
-  roleLabel: string;
-  name: string;
-  bidang?: string | null;
-  isMenuOpen: boolean;
-  onClose: () => void;
-  onLogout: () => void;
-}
+import { AdminSidebarProps } from "@/types/admin";
 
 export function AdminSidebar({
   role,

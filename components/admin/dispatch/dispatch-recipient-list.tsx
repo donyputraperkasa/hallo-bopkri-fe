@@ -3,16 +3,8 @@
 import { Briefcase, Check, CheckCheck, RotateCcw, Users } from "lucide-react";
 import { BIDANG_TAGS } from "@/lib/constants";
 import type { AdminUser } from "@/types";
+import type { DispatchRecipientListProps } from "@/types/admin";
 
-interface DispatchRecipientListProps {
-  directors: AdminUser[];
-  managers: AdminUser[];
-  selectedIds: string[];
-  complaintTags: string[];
-  onToggle: (userId: string) => void;
-  onSelectAllManagers: () => void;
-  onClear: () => void;
-}
 
 export function DispatchRecipientList({
   directors,

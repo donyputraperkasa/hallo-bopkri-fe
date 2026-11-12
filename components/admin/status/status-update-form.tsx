@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { api } from "@/lib/client-api";
-import type { ComplaintStatus } from "@/types/api";
+import type { StatusUpdateFormProps } from "@/types/status";
 import { useToast } from "@/components/ui/toast-provider";
 
 export function StatusUpdateForm({
@@ -10,12 +10,7 @@ export function StatusUpdateForm({
   currentId,
   statuses,
   onUpdated,
-}: {
-  complaintId: string;
-  currentId: string;
-  statuses: ComplaintStatus[];
-  onUpdated: () => void;
-}) {
+}: StatusUpdateFormProps) {
   const { show } = useToast();
   const [statusId, setStatusId] = useState(currentId);
   const [note, setNote] = useState("");

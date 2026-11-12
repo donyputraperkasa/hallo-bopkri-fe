@@ -1,12 +1,7 @@
 "use client";
 
 import { LoaderCircle } from "lucide-react";
-import type { ComplaintStatus } from "@/types/api";
-
-interface StatusListSectionProps {
-  statuses: ComplaintStatus[] | null;
-  onToggle: (item: ComplaintStatus) => void;
-}
+import type { StatusListSectionProps } from "@/types/status";
 
 export function StatusListSection({ statuses, onToggle }: StatusListSectionProps) {
   return (

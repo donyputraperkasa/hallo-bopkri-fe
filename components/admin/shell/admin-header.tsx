@@ -1,12 +1,7 @@
 "use client";
 
 import { CalendarDays, Menu } from "lucide-react";
-
-interface AdminHeaderProps {
-  name: string;
-  roleLabel: string;
-  onOpenMenu: () => void;
-}
+import { AdminHeaderProps } from "@/types/admin";
 
 export function AdminHeader({ name, roleLabel, onOpenMenu }: AdminHeaderProps) {
   const currentMonthYear = new Intl.DateTimeFormat("id-ID", {

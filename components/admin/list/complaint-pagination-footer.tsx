@@ -1,14 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-interface ComplaintPaginationFooterProps {
-  filteredCount: number;
-  totalCount: number;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
+import type { ComplaintPaginationFooterProps } from "@/types/admin";
 
 export function ComplaintPaginationFooter({
   filteredCount,

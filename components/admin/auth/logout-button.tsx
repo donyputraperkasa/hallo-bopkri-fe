@@ -3,11 +3,7 @@
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/toast-provider";
-
-interface LogoutButtonProps {
-  /** "sidebar" → full-width, gaya sidebar. "header" → compact text button (default) */
-  variant?: "header" | "sidebar";
-}
+import type { LogoutButtonProps } from "@/types/admin";
 
 export function LogoutButton({ variant = "sidebar" }: LogoutButtonProps) {
   const router = useRouter();

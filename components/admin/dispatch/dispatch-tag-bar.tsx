@@ -2,12 +2,7 @@
 
 import { Sparkles, Tag as TagIcon } from "lucide-react";
 import { BIDANG_TAGS, getTagStyle } from "@/lib/constants";
-
-interface DispatchTagBarProps {
-  tags: string[];
-  matchingCount: number;
-  onSelectMatching: () => void;
-}
+import type { DispatchTagBarProps } from "@/types/admin";
 
 export function DispatchTagBar({
   tags,

@@ -2,10 +2,7 @@
 
 import { Info } from "lucide-react";
 import type { AdminUser } from "@/types";
-
-interface DispatchSummaryBoxProps {
-  selectedUsers: AdminUser[];
-}
+import type { DispatchSummaryBoxProps } from "@/types/admin";
 
 export function DispatchSummaryBox({ selectedUsers }: DispatchSummaryBoxProps) {
   if (selectedUsers.length === 0) {

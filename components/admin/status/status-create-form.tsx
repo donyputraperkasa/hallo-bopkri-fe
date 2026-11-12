@@ -1,13 +1,7 @@
 "use client";
 
-import { FormEvent } from "react";
 import { Plus } from "lucide-react";
-
-interface StatusCreateFormProps {
-  saving: boolean;
-  error: string;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-}
+import type { StatusCreateFormProps } from "@/types/status";
 
 export function StatusCreateForm({ saving, error, onSubmit }: StatusCreateFormProps) {
   return (

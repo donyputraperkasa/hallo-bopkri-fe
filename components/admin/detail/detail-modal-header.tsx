@@ -2,12 +2,7 @@
 
 import { X } from "lucide-react";
 import { categoryLabel } from "@/lib/constants";
-import type { Complaint } from "@/types/api";
-
-interface DetailModalHeaderProps {
-  current: Complaint;
-  onClose: () => void;
-}
+import type { DetailModalHeaderProps } from "@/types/admin";
 
 export function DetailModalHeader({ current, onClose }: DetailModalHeaderProps) {
   return (

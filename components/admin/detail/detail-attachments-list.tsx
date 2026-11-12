@@ -2,14 +2,7 @@
 
 import { Download, Eye, Paperclip } from "lucide-react";
 import { formatBytes } from "@/lib/constants";
-import type { Attachment } from "@/types/api";
-
-interface DetailAttachmentsListProps {
-  attachments?: Attachment[];
-  attachmentCount?: number;
-  onPreview: (att: Attachment) => void;
-  allowDownload?: boolean;
-}
+import type { DetailAttachmentsListProps } from "@/types/admin";
 
 export function DetailAttachmentsList({
   attachments,

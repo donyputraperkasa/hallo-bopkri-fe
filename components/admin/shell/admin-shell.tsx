@@ -8,15 +8,11 @@ import { showToast } from "@/lib/feedback/toast";
 import { CreatorFooter } from "@/components/layout/creator-footer";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminHeader } from "./admin-header";
+import { AdminShellProps } from "@/types/admin";
 
 type AdminRole = "owner" | "director" | "manager";
 
-interface AdminShellProps {
-  children: React.ReactNode;
-  role?: AdminRole;
-  displayName?: string;
-  bidang?: string | null;
-}
+
 
 function formatRole(role: AdminRole): string {
   if (role === "director") return "Direktur";

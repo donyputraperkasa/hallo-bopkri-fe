@@ -3,13 +3,8 @@
 import { SendHorizontal } from "lucide-react";
 import { BIDANG_TAGS, getTagStyle } from "@/lib/constants";
 import type { Complaint } from "@/types/api";
+import type { DetailTagsBarProps } from "@/types/admin";
 
-interface DetailTagsBarProps {
-  tags: string[];
-  current: Complaint;
-  readOnly: boolean;
-  onOpenDispatch: (c: Complaint) => void;
-}
 
 export function DetailTagsBar({
   tags,

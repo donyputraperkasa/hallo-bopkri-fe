@@ -2,14 +2,7 @@
 
 import { Check, SendHorizontal } from "lucide-react";
 import { BIDANG_TAGS } from "@/lib/constants";
-
-interface ComplaintBidangCardProps {
-  selectedBidangs: string[];
-  isDispatching: boolean;
-  onToggleBidang: (bidang: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  onOpenModal: () => void;
-}
+import { ComplaintBidangCardProps } from "@/types/admin";
 
 export function ComplaintBidangCard({
   selectedBidangs,

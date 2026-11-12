@@ -4,13 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
 import type { Complaint, ComplaintStatus } from "@/types/api";
-
-interface DetailQuickStatusFormProps {
-  complaintId: string;
-  currentStatusId: string;
-  statuses: ComplaintStatus[];
-  onUpdated: (updatedComplaint: Complaint) => void;
-}
+import type { DetailQuickStatusFormProps } from "@/types/admin";
 
 export function DetailQuickStatusForm({
   complaintId,

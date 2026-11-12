@@ -2,13 +2,7 @@
 
 import { SendHorizontal, Tag as TagIcon } from "lucide-react";
 import { BIDANG_TAGS, categoryLabel, formatDate, getTagStyle } from "@/lib/constants";
-import type { Complaint } from "@/types/api";
-
-interface ComplaintMainCardProps {
-  item: Complaint;
-  activeTags: string[];
-  onOpenDispatch: () => void;
-}
+import type { ComplaintMainCardProps } from "@/types/admin";
 
 export function ComplaintMainCard({
   item,

@@ -1,9 +1,6 @@
 "use client";
 
-interface DispatchNoteInputProps {
-  note: string;
-  onChange: (value: string) => void;
-}
+import type { DispatchNoteInputProps } from "@/types/admin";
 
 export function DispatchNoteInput({ note, onChange }: DispatchNoteInputProps) {
   return (
