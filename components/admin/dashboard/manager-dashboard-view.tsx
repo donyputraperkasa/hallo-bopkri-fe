@@ -2,22 +2,42 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ClipboardList, LoaderCircle } from "lucide-react";
+import { ClipboardList, LoaderCircle, Mail, MailOpen } from "lucide-react";
 import { api } from "@/lib/client-api";
 import { useAuth } from "@/hooks/use-auth";
 import { getTagStyle, BIDANG_TAGS } from "@/lib/constants";
+import {
+  getReadComplaintIds,
+  getReadScope,
+  subscribeReadComplaints,
+} from "@/lib/read-complaints";
 import type { ComplaintList as ListData } from "@/types/api";
 
 export function ManagerDashboardView() {
   const { user } = useAuth();
+  const scope = getReadScope(user);
   const [data, setData] = useState<ListData | null>(null);
   const [error, setError] = useState("");
+  const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
     api<ListData>("/api/admin/complaints?page=1&limit=10")
       .then(setData)
       .catch((r) => setError(r.message));
   }, []);
+
+  useEffect(() => {
+    const frameId = requestAnimationFrame(() => {
+      setReadIds(getReadComplaintIds(scope));
+    });
+    const unsubscribe = subscribeReadComplaints(() => {
+      setReadIds(getReadComplaintIds(scope));
+    });
+    return () => {
+      cancelAnimationFrame(frameId);
+      unsubscribe();
+    };
+  }, [scope]);
 
   const bidang = user?.bidang ?? "";
   const tagInfo = BIDANG_TAGS.find((b) => b.value.toLowerCase() === bidang.toLowerCase());
@@ -136,30 +156,61 @@ export function ManagerDashboardView() {
               Belum ada aduan yang dikirim ke bidang Anda.
             </p>
           ) : (
-            data.data.slice(0, 5).map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between rounded-lg border border-[#dbe5f4] bg-[#f8fbff] p-4 transition hover:border-[#b6cce8] hover:bg-white"
-              >
-                <div className="min-w-0 pr-4">
-                  <span className="font-mono text-xs font-semibold text-[#1f4f8f]">
-                    {item.ticketCode}
-                  </span>
-                  <p className="mt-1 truncate text-sm font-semibold text-[#172033]">
-                    {item.content}
-                  </p>
-                </div>
-                <span
-                  className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold"
-                  style={{
-                    backgroundColor: `${item.status.color}18`,
-                    color: item.status.color,
-                  }}
+            data.data.slice(0, 5).map((item) => {
+              const isUnread = !readIds.has(item.id);
+              return (
+                <Link
+                  key={item.id}
+                  href="/panel/manager/aduan"
+                  className={[
+                    "flex items-center justify-between rounded-lg border border-l-4 p-4 transition",
+                    isUnread
+                      ? "border-[#cfe0f5] border-l-[#2563eb] bg-[#eff6ff]/70 hover:bg-[#e5f0ff]/80"
+                      : "border-[#dbe5f4] border-l-transparent bg-[#f8fbff] hover:border-[#b6cce8] hover:bg-white",
+                  ].join(" ")}
                 >
-                  {item.status.name}
-                </span>
-              </div>
-            ))
+                  <div className="min-w-0 pr-4">
+                    <div className="flex items-center gap-2">
+                      {isUnread ? (
+                        <Mail size={14} className="text-[#2563eb] shrink-0" />
+                      ) : (
+                        <MailOpen size={14} className="text-[#94a3b8] shrink-0" />
+                      )}
+                      <span
+                        className={[
+                          "font-mono text-xs",
+                          isUnread ? "font-bold text-[#0f2a4f]" : "font-semibold text-[#1f4f8f]",
+                        ].join(" ")}
+                      >
+                        {item.ticketCode}
+                      </span>
+                      {isUnread && (
+                        <span className="inline-flex items-center rounded-full bg-[#2563eb] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                          Baru
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      className={[
+                        "mt-1 truncate text-sm",
+                        isUnread ? "font-bold text-[#0f172a]" : "font-medium text-[#475569]",
+                      ].join(" ")}
+                    >
+                      {item.content}
+                    </p>
+                  </div>
+                  <span
+                    className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{
+                      backgroundColor: `${item.status.color}18`,
+                      color: item.status.color,
+                    }}
+                  >
+                    {item.status.name}
+                  </span>
+                </Link>
+              );
+            })
           )}
         </div>
       </section>

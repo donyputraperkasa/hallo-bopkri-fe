@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { api } from "@/lib/client-api";
+import { getReadScope, markComplaintAsRead } from "@/lib/read-complaints";
 import type { Attachment, Complaint, ComplaintStatus } from "@/types/api";
 import { useToast } from "@/components/ui/toast-provider";
 import { useAuth } from "@/hooks/use-auth";
@@ -56,8 +57,9 @@ export function ComplaintDetail({ id }: { id: string }) {
   }, [id]);
 
   useEffect(() => {
+    markComplaintAsRead(id, getReadScope(user));
     void load();
-  }, [load]);
+  }, [id, user, load]);
 
   const toggleBidang = (val: string) => {
     setSelectedBidangs((prev) =>

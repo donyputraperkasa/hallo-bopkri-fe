@@ -1,50 +1,64 @@
-const READ_COMPLAINTS_STORAGE_KEY = "hallo_admin_read_complaints";
+import type { AuthUser } from "@/types";
+
+const READ_COMPLAINTS_STORAGE_PREFIX = "hallo_admin_read_complaints";
 const READ_COMPLAINTS_EVENT = "hallo:read-complaints-changed";
 
-export function getReadComplaintIds(): Set<string> {
+export function getReadScope(user?: AuthUser | null): string {
+  if (!user) return "default";
+  const bidangPart = user.bidang ? `_${user.bidang.toLowerCase()}` : "";
+  return `${user.role}${bidangPart}_${user.username || user.id}`;
+}
+
+function storageKeyFor(scope = "default"): string {
+  return `${READ_COMPLAINTS_STORAGE_PREFIX}:${scope}`;
+}
+
+export function getReadComplaintIds(scope = "default"): Set<string> {
   if (typeof window === "undefined") return new Set();
   try {
-    const raw = localStorage.getItem(READ_COMPLAINTS_STORAGE_KEY);
+    const raw = localStorage.getItem(storageKeyFor(scope));
     if (!raw) return new Set();
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? new Set(parsed.filter((v): v is string => typeof v === "string")) : new Set();
+    return Array.isArray(parsed)
+      ? new Set(parsed.filter((v): v is string => typeof v === "string"))
+      : new Set();
   } catch {
     return new Set();
   }
 }
 
-function saveReadComplaintIds(ids: Set<string>) {
+function saveReadComplaintIds(ids: Set<string>, scope = "default") {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(READ_COMPLAINTS_STORAGE_KEY, JSON.stringify(Array.from(ids)));
+    localStorage.setItem(storageKeyFor(scope), JSON.stringify(Array.from(ids)));
     window.dispatchEvent(new CustomEvent(READ_COMPLAINTS_EVENT));
   } catch {
     // Ignore storage quota errors
   }
 }
 
-export function markComplaintAsRead(id: string) {
+export function markComplaintAsRead(id: string, scope = "default") {
   if (!id) return;
-  const ids = getReadComplaintIds();
+  const ids = getReadComplaintIds(scope);
   if (!ids.has(id)) {
     ids.add(id);
-    saveReadComplaintIds(ids);
+    saveReadComplaintIds(ids, scope);
   }
 }
 
-export function toggleComplaintRead(id: string) {
+export function toggleComplaintRead(id: string, scope = "default") {
   if (!id) return;
-  const ids = getReadComplaintIds();
+  const ids = getReadComplaintIds(scope);
   if (ids.has(id)) {
     ids.delete(id);
   } else {
     ids.add(id);
   }
-  saveReadComplaintIds(ids);
+  saveReadComplaintIds(ids, scope);
 }
 
-export function markAllComplaintsAsRead(complaintIds: string[]) {
-  const ids = getReadComplaintIds();
+export function markAllComplaintsAsRead(complaintIds: string[], scope = "default") {
+  const ids = getReadComplaintIds(scope);
   let changed = false;
   for (const id of complaintIds) {
     if (id && !ids.has(id)) {
@@ -53,7 +67,7 @@ export function markAllComplaintsAsRead(complaintIds: string[]) {
     }
   }
   if (changed) {
-    saveReadComplaintIds(ids);
+    saveReadComplaintIds(ids, scope);
   }
 }
 
