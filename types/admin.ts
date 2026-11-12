@@ -49,3 +49,15 @@ export interface ComplaintTableRowProps {
   onOpenDetail: () => void;
   onOpenDispatch: () => void;
 }
+
+export interface ManagerStatItem {
+  href: string;
+  label: string;
+  value: string;
+  note: string;
+}
+
+export interface ManagerRecentComplaintsProps {
+  items: Complaint[];
+  readIds: Set<string>;
+}
