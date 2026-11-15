@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { Inbox, LoaderCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import {
-  getReadComplaintIds,
-  getReadScope,
+  getReadOverrides,
+  isComplaintUnread,
   markAllComplaintsAsRead,
   markComplaintAsRead,
   subscribeReadComplaints,
@@ -24,21 +24,15 @@ export function ComplaintTable({
   readOnly = false,
 }: ComplaintTableProps) {
   const { user } = useAuth();
-  const scope = getReadScope(user);
-  const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
+  const role = user?.role ?? "owner";
+  const [readOverrides, setReadOverrides] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
-      setReadIds(getReadComplaintIds(scope));
-    });
     const unsubscribe = subscribeReadComplaints(() => {
-      setReadIds(getReadComplaintIds(scope));
+      setReadOverrides(getReadOverrides());
     });
-    return () => {
-      cancelAnimationFrame(frameId);
-      unsubscribe();
-    };
-  }, [scope]);
+    return () => unsubscribe();
+  }, []);
 
   if (loading) {
     return (
@@ -63,14 +57,16 @@ export function ComplaintTable({
     );
   }
 
-  const unreadCount = data.filter((item) => !readIds.has(item.id)).length;
+  const unreadCount = data.filter((item) =>
+    isComplaintUnread(item, role, readOverrides),
+  ).length;
 
   return (
     <div>
       <ComplaintReadBar
         unreadCount={unreadCount}
         readCount={data.length - unreadCount}
-        onMarkAllRead={() => markAllComplaintsAsRead(data.map((i) => i.id), scope)}
+        onMarkAllRead={() => markAllComplaintsAsRead(data.map((i) => i.id))}
       />
 
       <div className="overflow-x-auto">
@@ -91,15 +87,16 @@ export function ComplaintTable({
                 key={item.id}
                 item={item}
                 tags={overrides[item.id] ?? getRowTags(item)}
-                isUnread={!readIds.has(item.id)}
+                isUnread={isComplaintUnread(item, role, readOverrides)}
+                role={role}
                 readOnly={readOnly}
-                onToggleRead={() => toggleComplaintRead(item.id, scope)}
+                onToggleRead={() => toggleComplaintRead(item, role)}
                 onOpenDetail={() => {
-                  markComplaintAsRead(item.id, scope);
+                  markComplaintAsRead(item.id);
                   onOpenDetail(item);
                 }}
                 onOpenDispatch={() => {
-                  markComplaintAsRead(item.id, scope);
+                  markComplaintAsRead(item.id);
                   onOpenDispatch(item);
                 }}
               />

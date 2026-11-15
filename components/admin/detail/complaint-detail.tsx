@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { api } from "@/lib/client-api";
-import { getReadScope, markComplaintAsRead } from "@/lib/read-complaints";
+import { markComplaintAsRead } from "@/lib/read-complaints";
 import type { Attachment, Complaint, ComplaintStatus } from "@/types/api";
 import { useToast } from "@/components/ui/toast-provider";
 import { useAuth } from "@/hooks/use-auth";
@@ -57,9 +57,12 @@ export function ComplaintDetail({ id }: { id: string }) {
   }, [id]);
 
   useEffect(() => {
-    markComplaintAsRead(id, getReadScope(user));
-    void load();
-  }, [id, user, load]);
+    markComplaintAsRead(id);
+    const frameId = requestAnimationFrame(() => {
+      void load();
+    });
+    return () => cancelAnimationFrame(frameId);
+  }, [id, load]);
 
   const toggleBidang = (val: string) => {
     setSelectedBidangs((prev) =>
@@ -169,7 +172,7 @@ export function ComplaintDetail({ id }: { id: string }) {
       <ComplaintDispatchModal
         item={dispatchModalOpen ? item : null}
         onClose={() => setDispatchModalOpen(false)}
-        onDispatch={(_id, _adminIds, _bidangs) => {
+        onDispatch={() => {
           setDispatchModalOpen(false);
           void load();
         }}

@@ -1,73 +1,145 @@
-import type { AuthUser } from "@/types";
+import type { AdminRole, Complaint } from "@/types";
 
-const READ_COMPLAINTS_STORAGE_PREFIX = "hallo_admin_read_complaints";
 const READ_COMPLAINTS_EVENT = "hallo:read-complaints-changed";
 
-export function getReadScope(user?: AuthUser | null): string {
-  if (!user) return "default";
-  const bidangPart = user.bidang ? `_${user.bidang.toLowerCase()}` : "";
-  return `${user.role}${bidangPart}_${user.username || user.id}`;
+// State di memori (tanpa localStorage) untuk respons instan sebelum/saat request API ke database selesai
+const memoryReadOverrides: Record<string, boolean> = {};
+
+export function getReadOverrides(): Record<string, boolean> {
+  return { ...memoryReadOverrides };
 }
 
-function storageKeyFor(scope = "default"): string {
-  return `${READ_COMPLAINTS_STORAGE_PREFIX}:${scope}`;
-}
-
-export function getReadComplaintIds(scope = "default"): Set<string> {
-  if (typeof window === "undefined") return new Set();
-  try {
-    const raw = localStorage.getItem(storageKeyFor(scope));
-    if (!raw) return new Set();
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? new Set(parsed.filter((v): v is string => typeof v === "string"))
-      : new Set();
-  } catch {
-    return new Set();
-  }
-}
-
-function saveReadComplaintIds(ids: Set<string>, scope = "default") {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(storageKeyFor(scope), JSON.stringify(Array.from(ids)));
+function notifyReadChange() {
+  if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(READ_COMPLAINTS_EVENT));
-  } catch {
-    // Ignore storage quota errors
   }
 }
 
-export function markComplaintAsRead(id: string, scope = "default") {
+/**
+ * Menentukan apakah aduan berstatus "Belum dibuka" (Unread) murni dari Database Server
+ * (serta state aksi klik pada sesi berjalan, tanpa localStorage).
+ */
+export function isComplaintUnread(
+  item: Complaint,
+  role: AdminRole = "owner",
+  overrides: Record<string, boolean> = memoryReadOverrides,
+): boolean {
+  // 1. Jika baru saja diklik/diubah status bacanya pada sesi aktif
+  if (item.id in overrides) {
+    return !overrides[item.id];
+  }
+
+  // 2. Jika backend mengirimkan field `isRead` per user dari database
+  if (typeof item.isRead === "boolean") {
+    return !item.isRead;
+  }
+
+  // 3. Penentuan otomatis dari status Database Server:
+  const code = (item.status?.code ?? "").toUpperCase();
+  const name = (item.status?.name ?? "").toLowerCase();
+  const isFinal = Boolean(item.status?.isFinal);
+
+  if (isFinal || ["SELESAI", "DITOLAK", "CLOSED", "RESOLVED"].includes(code)) {
+    return false;
+  }
+
+  const isInitialNew =
+    code === "NEW" ||
+    code === "BARU" ||
+    name.includes("aduan baru") ||
+    name === "baru";
+
+  if (role === "owner" || role === "director") {
+    // Bagi Owner & Direktur: hanya yang statusnya masih "Aduan Baru" di database yang belum dibuka.
+    // Begitu dikirim ke bidang ("Diteruskan"), otomatis berstatus sudah dibuka bagi Owner.
+    return isInitialNew;
+  }
+
+  // Bagi Manajer Bidang: aduan yang baru dikirim oleh Owner ke bidangnya
+  // (status "Diteruskan" / "Aduan Baru") otomatis berstatus baru/belum dibuka.
+  const isNewForManager =
+    isInitialNew ||
+    code === "DISPATCHED" ||
+    code === "DITERUSKAN" ||
+    name.includes("diteruskan") ||
+    name.includes("disposisi");
+
+  return isNewForManager;
+}
+
+/**
+ * Label status tampilan: untuk Manajer Bidang, aduan yang baru dikirim dari Owner
+ * ("Diteruskan") dan belum dibuka ditampilkan sebagai "Aduan Baru".
+ */
+export function getDisplayStatusName(
+  item: Complaint,
+  role: AdminRole = "owner",
+  isUnread = false,
+): string {
+  if (role === "manager" && isUnread) {
+    const code = (item.status?.code ?? "").toUpperCase();
+    const name = (item.status?.name ?? "").toLowerCase();
+    if (
+      code === "DISPATCHED" ||
+      code === "DITERUSKAN" ||
+      name.includes("diteruskan") ||
+      name.includes("disposisi")
+    ) {
+      return "Aduan Baru";
+    }
+  }
+  return item.status?.name ?? "Aduan Baru";
+}
+
+export function markComplaintAsRead(id: string) {
   if (!id) return;
-  const ids = getReadComplaintIds(scope);
-  if (!ids.has(id)) {
-    ids.add(id);
-    saveReadComplaintIds(ids, scope);
+  if (memoryReadOverrides[id] !== true) {
+    memoryReadOverrides[id] = true;
+    notifyReadChange();
+  }
+  // Sinkronkan ke endpoint database backend jika tersedia
+  if (typeof window !== "undefined") {
+    void fetch(`/api/admin/complaints/${encodeURIComponent(id)}/read`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ isRead: true }),
+    }).catch(() => {});
   }
 }
 
-export function toggleComplaintRead(id: string, scope = "default") {
-  if (!id) return;
-  const ids = getReadComplaintIds(scope);
-  if (ids.has(id)) {
-    ids.delete(id);
-  } else {
-    ids.add(id);
+export function toggleComplaintRead(item: Complaint, role: AdminRole = "owner") {
+  if (!item?.id) return;
+  const currentlyUnread = isComplaintUnread(item, role, memoryReadOverrides);
+  const nextIsRead = currentlyUnread;
+  memoryReadOverrides[item.id] = nextIsRead;
+  notifyReadChange();
+
+  if (typeof window !== "undefined") {
+    void fetch(`/api/admin/complaints/${encodeURIComponent(item.id)}/read`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ isRead: nextIsRead }),
+    }).catch(() => {});
   }
-  saveReadComplaintIds(ids, scope);
 }
 
-export function markAllComplaintsAsRead(complaintIds: string[], scope = "default") {
-  const ids = getReadComplaintIds(scope);
+export function markAllComplaintsAsRead(complaintIds: string[]) {
   let changed = false;
   for (const id of complaintIds) {
-    if (id && !ids.has(id)) {
-      ids.add(id);
+    if (id && memoryReadOverrides[id] !== true) {
+      memoryReadOverrides[id] = true;
       changed = true;
     }
   }
   if (changed) {
-    saveReadComplaintIds(ids, scope);
+    notifyReadChange();
+  }
+  if (typeof window !== "undefined" && complaintIds.length > 0) {
+    void fetch("/api/admin/complaints/read-all", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ids: complaintIds }),
+    }).catch(() => {});
   }
 }
 
@@ -75,9 +147,7 @@ export function subscribeReadComplaints(callback: () => void): () => void {
   if (typeof window === "undefined") return () => {};
   const handler = () => callback();
   window.addEventListener(READ_COMPLAINTS_EVENT, handler);
-  window.addEventListener("storage", handler);
   return () => {
     window.removeEventListener(READ_COMPLAINTS_EVENT, handler);
-    window.removeEventListener("storage", handler);
   };
 }

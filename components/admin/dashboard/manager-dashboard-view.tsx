@@ -6,8 +6,7 @@ import { api } from "@/lib/client-api";
 import { useAuth } from "@/hooks/use-auth";
 import { BIDANG_TAGS } from "@/lib/constants";
 import {
-  getReadComplaintIds,
-  getReadScope,
+  getReadOverrides,
   subscribeReadComplaints,
 } from "@/lib/read-complaints";
 import type { ComplaintList as ListData, ManagerStatItem } from "@/types";
@@ -16,10 +15,9 @@ import { ManagerRecentComplaints } from "./manager-recent-complaints";
 
 export function ManagerDashboardView() {
   const { user } = useAuth();
-  const scope = getReadScope(user);
   const [data, setData] = useState<ListData | null>(null);
   const [error, setError] = useState("");
-  const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
+  const [readOverrides, setReadOverrides] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     api<ListData>("/api/admin/complaints?page=1&limit=10")
@@ -28,17 +26,11 @@ export function ManagerDashboardView() {
   }, []);
 
   useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
-      setReadIds(getReadComplaintIds(scope));
-    });
     const unsubscribe = subscribeReadComplaints(() => {
-      setReadIds(getReadComplaintIds(scope));
+      setReadOverrides(getReadOverrides());
     });
-    return () => {
-      cancelAnimationFrame(frameId);
-      unsubscribe();
-    };
-  }, [scope]);
+    return () => unsubscribe();
+  }, []);
 
   if (error) {
     return (
@@ -87,7 +79,7 @@ export function ManagerDashboardView() {
     <div className="space-y-5">
       <ManagerHeaderBanner bidang={bidang} />
       <ManagerStatGrid stats={stats} />
-      <ManagerRecentComplaints items={data.data} readIds={readIds} />
+      <ManagerRecentComplaints items={data.data} readOverrides={readOverrides} />
     </div>
   );
 }

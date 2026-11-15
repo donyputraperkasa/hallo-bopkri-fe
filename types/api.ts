@@ -34,6 +34,7 @@ export interface Complaint {
   contact?: string | null;
   content: string;
   status: ComplaintStatus;
+  isRead?: boolean;
   createdAt: string;
   updatedAt: string;
   histories?: ComplaintHistory[];

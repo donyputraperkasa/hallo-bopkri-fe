@@ -2,6 +2,7 @@
 
 import { Eye, Mail, MailOpen, SendHorizontal } from "lucide-react";
 import { BIDANG_TAGS, categoryLabel, formatDate, getTagStyle } from "@/lib/constants";
+import { getDisplayStatusName } from "@/lib/read-complaints";
 import type { Complaint, ComplaintTableRowProps } from "@/types";
 
 export function getRowTags(item: Complaint): string[] {
@@ -19,11 +20,13 @@ export function ComplaintTableRow({
   item,
   tags,
   isUnread,
+  role = "owner",
   readOnly,
   onToggleRead,
   onOpenDetail,
   onOpenDispatch,
 }: ComplaintTableRowProps) {
+  const displayStatusName = getDisplayStatusName(item, role, isUnread);
   return (
     <tr
       className={[
@@ -114,7 +117,7 @@ export function ComplaintTableRow({
             background: `${item.status.color}18`,
           }}
         >
-          {item.status.name}
+          {displayStatusName}
         </span>
       </td>
 

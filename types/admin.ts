@@ -44,6 +44,7 @@ export interface ComplaintTableRowProps {
   item: Complaint;
   tags: string[];
   isUnread: boolean;
+  role?: AdminRole;
   readOnly: boolean;
   onToggleRead: () => void;
   onOpenDetail: () => void;
@@ -130,7 +131,7 @@ export interface ManagerStatItem {
 
 export interface ManagerRecentComplaintsProps {
   items: Complaint[];
-  readIds: Set<string>;
+  readOverrides: Record<string, boolean>;
 }
 
 export interface AdminSidebarProps {

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { Mail, MailOpen } from "lucide-react";
+import { getDisplayStatusName, isComplaintUnread } from "@/lib/read-complaints";
 import type { ManagerRecentComplaintsProps } from "@/types";
 
 export function ManagerRecentComplaints({
   items,
-  readIds,
+  readOverrides,
 }: ManagerRecentComplaintsProps) {
   return (
     <section className="rounded-lg border border-[#dbe5f4] bg-white p-5 shadow-sm">
@@ -28,11 +29,12 @@ export function ManagerRecentComplaints({
       <div className="mt-5 space-y-3">
         {items.length === 0 ? (
           <p className="py-8 text-center text-sm font-semibold text-[#748299]">
-            Belum ada formulir yang masuk ke bidang Anda.
+            Belum ada aduan yang dikirim ke bidang Anda.
           </p>
         ) : (
           items.slice(0, 5).map((item) => {
-            const isUnread = !readIds.has(item.id);
+            const isUnread = isComplaintUnread(item, "manager", readOverrides);
+            const displayStatusName = getDisplayStatusName(item, "manager", isUnread);
             return (
               <Link
                 key={item.id}
@@ -81,7 +83,7 @@ export function ManagerRecentComplaints({
                     color: item.status.color,
                   }}
                 >
-                  {item.status.name}
+                  {displayStatusName}
                 </span>
               </Link>
             );
@@ -91,4 +93,3 @@ export function ManagerRecentComplaints({
     </section>
   );
 }
-
