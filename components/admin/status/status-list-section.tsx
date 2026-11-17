@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import type { StatusListSectionProps } from "@/types/status";
 
 export function StatusListSection({ statuses, onToggle }: StatusListSectionProps) {
@@ -11,9 +11,7 @@ export function StatusListSection({ statuses, onToggle }: StatusListSectionProps
       </div>
 
       {!statuses ? (
-        <div className="flex justify-center py-10">
-          <LoaderCircle className="size-6 animate-spin text-[#0f2a4f]" />
-        </div>
+        <GlobalLoading isLoading={true} />
       ) : (
         <div className="divide-y divide-[#eef3fb]">
           {statuses.map((item) => (

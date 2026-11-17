@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, LoaderCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { api } from "@/lib/client-api";
 import { markComplaintAsRead } from "@/lib/read-complaints";
 import type { Attachment, Complaint, ComplaintStatus } from "@/types/api";
@@ -110,11 +111,7 @@ export function ComplaintDetail({ id }: { id: string }) {
   }
 
   if (!item) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
-      </div>
-    );
+    return <GlobalLoading isLoading={true} />;
   }
 
   return (

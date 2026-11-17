@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Search, Ticket } from "lucide-react";
 import { api } from "@/lib/client-api";
+import { GlobalLoading } from "@/components/brand-kit";
 import { getStoredTickets, removeStoredTicket } from "@/lib/client-tickets";
 import type { StoredTicket, TrackResult } from "@/types";
 import { TrackingResult } from "./tracking-result";
@@ -94,6 +95,7 @@ export function TrackingForm({ initialTicket = "" }: { initialTicket?: string })
       )}
 
       {result && <TrackingResult data={result} />}
+      <GlobalLoading isLoading={loading} />
     </div>
   );
 }

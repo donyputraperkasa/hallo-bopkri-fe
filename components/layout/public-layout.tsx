@@ -1,9 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
-import { FloatingContact } from "@/components/public/floating-contact";
+import { CreateByMe, FloatingContact } from "@/components/brand-kit";
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,7 +13,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       <main key={pathname} className="flex-1 animate-page-enter">
         {children}
       </main>
-      <SiteFooter />
+      <CreateByMe />
       <FloatingContact />
     </div>
   );

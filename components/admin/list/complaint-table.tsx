@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Inbox, LoaderCircle } from "lucide-react";
+import { Inbox } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { useAuth } from "@/hooks/use-auth";
 import {
   getReadOverrides,
@@ -35,12 +36,7 @@ export function ComplaintTable({
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-16">
-        <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
-        <p className="text-sm font-medium text-[#748299]">Memuat data aduan...</p>
-      </div>
-    );
+    return <GlobalLoading isLoading={true} />;
   }
 
   if (data.length === 0) {

@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { ArrowRight, Eye, EyeOff, Info, LockKeyhole, User } from "lucide-react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
+import { GlobalLoading } from "@/components/brand-kit";
 import { ADMIN_ACTIVITY_STORAGE_KEY } from "@/hooks/use-inactivity";
 
 type AdminRole = "owner" | "director" | "manager";
@@ -132,6 +133,8 @@ export function LoginForm() {
         {loading ? "Memeriksa..." : "Masuk ke Panel"}
         <ArrowRight size={17} aria-hidden="true" />
       </button>
+
+      <GlobalLoading isLoading={loading} />
     </form>
   );
 }

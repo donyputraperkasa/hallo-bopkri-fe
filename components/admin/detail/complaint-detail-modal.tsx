@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { LoaderCircle } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { api } from "@/lib/client-api";
 import type { Attachment, Complaint, ComplaintStatus } from "@/types/api";
 import { ComplaintAttachmentPreview } from "./complaint-attachment-preview";
@@ -69,11 +69,7 @@ export function ComplaintDetailModal({
           <DetailModalHeader current={current} onClose={onClose} />
 
           <div className="flex-1 overflow-y-auto p-6 space-y-4.5">
-            {loading && !fullItem && (
-              <div className="py-10 flex justify-center">
-                <LoaderCircle className="size-6 animate-spin text-[#0f2a4f]" />
-              </div>
-            )}
+            {loading && !fullItem && <GlobalLoading isLoading={true} />}
 
             <DetailTagsBar
               tags={tags}

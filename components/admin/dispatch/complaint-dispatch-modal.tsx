@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { LoaderCircle, SendHorizontal } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { api, readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
 import type { Complaint, AdminUser } from "@/types";
@@ -115,9 +116,7 @@ export function ComplaintDispatchModal({
         <DispatchModalHeader ticketCode={item.ticketCode} onClose={onClose} />
 
         {loadingUsers ? (
-          <div className="flex justify-center py-8">
-            <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
-          </div>
+          <GlobalLoading isLoading={true} />
         ) : (
           <form onSubmit={handleSubmit} className="mt-5 space-y-4">
             <DispatchTagBar

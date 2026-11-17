@@ -157,11 +157,6 @@ export interface AdminHeaderProps {
   onOpenMenu: () => void;
 }
 
-export interface LogoutButtonProps {
-  /** "sidebar" → full-width, gaya sidebar. "header" → compact text button (default) */
-  variant?: "header" | "sidebar";
-}
-
 export interface ComplaintPaginationFooterProps {
   filteredCount: number;
   totalCount: number;

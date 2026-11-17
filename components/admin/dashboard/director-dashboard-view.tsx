@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ClipboardList, LoaderCircle } from "lucide-react";
+import { ClipboardList } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { api } from "@/lib/client-api";
 import { categoryLabel } from "@/lib/constants";
-import { useAuth } from "@/hooks/use-auth";
 import type { Dashboard } from "@/types/api";
 
 export function DirectorDashboardView() {
-  const { user } = useAuth();
   const [data, setData] = useState<Dashboard | null>(null);
   const [error, setError] = useState("");
 
@@ -28,11 +27,7 @@ export function DirectorDashboardView() {
   }
 
   if (!data) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
-      </div>
-    );
+    return <GlobalLoading isLoading={true} />;
   }
 
   const stats = [

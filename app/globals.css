@@ -73,40 +73,12 @@ button, a {
   }
 }
 
-@keyframes noticeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes toastProgress {
-  from {
-    transform: scaleX(1);
-  }
-  to {
-    transform: scaleX(0);
-  }
-}
-
 .modal-backdrop-enter {
   animation: modalBackdropIn 180ms ease-out both;
 }
 
 .modal-panel-enter {
   animation: modalPanelIn 220ms ease-out both;
-}
-
-.notice-enter {
-  animation: noticeIn 220ms ease-out both;
-}
-
-.toast-progress {
-  animation: toastProgress 2800ms linear both;
 }
 
 @keyframes pageEnter {

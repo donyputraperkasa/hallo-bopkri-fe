@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LoaderCircle } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { api } from "@/lib/client-api";
 import { useAuth } from "@/hooks/use-auth";
 import { BIDANG_TAGS } from "@/lib/constants";
@@ -41,11 +41,7 @@ export function ManagerDashboardView() {
   }
 
   if (!data) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
-      </div>
-    );
+    return <GlobalLoading isLoading={true} />;
   }
 
   const bidang = user?.bidang ?? "";

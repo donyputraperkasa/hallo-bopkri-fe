@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, LoaderCircle } from "lucide-react";
+import { ClipboardList } from "lucide-react";
+import { GlobalLoading } from "@/components/brand-kit";
 import { api } from "@/lib/client-api";
 import type { Dashboard } from "@/types/api";
 import { DashboardStatGrid } from "./dashboard-stat-grid";
@@ -30,11 +31,7 @@ export function DashboardView() {
   }
 
   if (!data) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <LoaderCircle className="size-8 animate-spin text-[#0f2a4f]" />
-      </div>
-    );
+    return <GlobalLoading isLoading={true} />;
   }
 
   return (

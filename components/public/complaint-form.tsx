@@ -3,6 +3,7 @@
 import { FormEvent, useState, useMemo } from "react";
 import { readResponse } from "@/lib/client-api";
 import { useToast } from "@/components/ui/toast-provider";
+import { GlobalLoading } from "@/components/brand-kit";
 import { saveSessionTicket } from "@/lib/client-tickets";
 import type { Category, PreviewFileItem, SubmittedComplaintDetails } from "@/types";
 import { ComplaintFields } from "./complaint-fields";
@@ -97,18 +98,21 @@ export function ComplaintForm() {
 
   if (step === "preview") {
     return (
-      <ComplaintPreview
-        category={category}
-        reporterName={reporterName}
-        contact={contact}
-        content={content}
-        selectedTags={selectedTags}
-        filePreviews={filePreviews}
-        loading={loading}
-        error={error}
-        onBack={() => setStep("form")}
-        onSubmit={handleFinalSubmit}
-      />
+      <>
+        <ComplaintPreview
+          category={category}
+          reporterName={reporterName}
+          contact={contact}
+          content={content}
+          selectedTags={selectedTags}
+          filePreviews={filePreviews}
+          loading={loading}
+          error={error}
+          onBack={() => setStep("form")}
+          onSubmit={handleFinalSubmit}
+        />
+        <GlobalLoading isLoading={loading} />
+      </>
     );
   }
 
