@@ -2,7 +2,9 @@
 
 import {
   consumeQueuedToast,
+  loaderEventName,
   toastEventName,
+  type GlobalLoaderPayload,
   type ToastPayload,
 } from "@/lib/feedback/toast";
 import { GlobalLoading, ToastNotice } from "@/components/brand-kit";
@@ -12,14 +14,35 @@ const TOAST_DURATION_MS = 2800;
 
 export function Toaster() {
   const [toast, setToast] = useState<ToastPayload | null>(null);
-  const [refreshLoading, setRefreshLoading] = useState(true);
+  const [loader, setLoader] = useState<{ visible: boolean; text?: string }>({
+    visible: true,
+    text: "bentar yaaa",
+  });
   const timeoutRef = useRef<number | null>(null);
+  const loaderTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const refreshTimer = window.setTimeout(() => {
-      setRefreshLoading(false);
+    loaderTimeoutRef.current = window.setTimeout(() => {
+      setLoader((prev) => ({ ...prev, visible: false }));
+      loaderTimeoutRef.current = null;
     }, 650);
-    return () => window.clearTimeout(refreshTimer);
+
+    const handleLoader = (event: Event) => {
+      const { text = "bentar yaaa", durationMs = 1200 } =
+        (event as CustomEvent<GlobalLoaderPayload>).detail ?? {};
+      if (loaderTimeoutRef.current) window.clearTimeout(loaderTimeoutRef.current);
+      setLoader({ visible: true, text });
+      loaderTimeoutRef.current = window.setTimeout(() => {
+        setLoader((prev) => ({ ...prev, visible: false }));
+        loaderTimeoutRef.current = null;
+      }, durationMs);
+    };
+
+    window.addEventListener(loaderEventName, handleLoader);
+    return () => {
+      window.removeEventListener(loaderEventName, handleLoader);
+      if (loaderTimeoutRef.current) window.clearTimeout(loaderTimeoutRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,7 +79,7 @@ export function Toaster() {
 
   return (
     <>
-      <GlobalLoading isLoading={refreshLoading} />
+      <GlobalLoading isLoading={loader.visible} text={loader.text} />
       <ToastNotice
         message={toast?.message ?? null}
         onClose={handleClose}

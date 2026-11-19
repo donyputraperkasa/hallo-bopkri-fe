@@ -3,7 +3,22 @@ import type { ToastType, ToastPayload } from "@/types";
 export type { ToastType, ToastPayload };
 
 export const toastEventName = "mybopkri:toast";
+export const loaderEventName = "mybopkri:loader";
 const pendingToastKey = "mybopkri.pending-toast";
+
+export interface GlobalLoaderPayload {
+  text?: string;
+  durationMs?: number;
+}
+
+export function showGlobalLoader(text = "bentar yaaa", durationMs = 1200) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(
+    new CustomEvent<GlobalLoaderPayload>(loaderEventName, {
+      detail: { text, durationMs },
+    }),
+  );
+}
 
 export function showToast(payload: ToastPayload) {
   if (typeof window === "undefined") return;

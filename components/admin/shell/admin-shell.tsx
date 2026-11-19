@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { useInactivityLogout } from "@/hooks/use-inactivity";
-import { showToast } from "@/lib/feedback/toast";
+import { showGlobalLoader } from "@/lib/feedback/toast";
 import { CreateByMe } from "@/components/brand-kit";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminHeader } from "./admin-header";
@@ -38,14 +38,10 @@ export function AdminShell({
   const roleLabel = formatRole(role);
 
   const handleLogout = async () => {
+    showGlobalLoader("dadaahh sayonaraa", 1200);
     try {
       await fetch("/api/auth/logout", { method: "POST" });
     } finally {
-      showToast({
-        message: "Sampai jumpa lagi di Hallo BOPKRI.",
-        title: "Dadaahhh sayonara",
-        type: "success",
-      });
       router.replace("/");
       router.refresh();
     }
